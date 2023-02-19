@@ -19,8 +19,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.students_camp_practise.ui.theme.Students_camp_practiseTheme
 
 class MainActivity : ComponentActivity() {
@@ -39,7 +41,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-data class Message(val author: String,val time: String, val body: String)
+data class Message(val author: String,val time: String, val body: String, val u_logo:Int)
 
 @Composable
 fun Greeting(messages: List<Message>) {
@@ -57,13 +59,42 @@ fun Greeting(messages: List<Message>) {
                     modifier = Modifier.size(392.dp, 309.dp),
                     alignment = Alignment.TopCenter
                 )
-                //Spacer(modifier = Modifier.padding(vertical = 16.dp))
-                Image(
-                    painter = painterResource(R.drawable.mask_logo),
-                    contentDescription = "logo picture",
-                    modifier = Modifier.size(149.dp, 395.dp),
-                    alignment = Alignment.BottomEnd
-                )
+                Row {
+
+                    Image(
+                        painter = painterResource(R.drawable.mask_logo),
+                        contentDescription = "logo picture",
+                        modifier = Modifier.size(149.dp, 395.dp),
+                        alignment = Alignment.BottomEnd
+                    )
+                    Column(modifier = Modifier.size(width =180.dp, height = 395.dp)){
+                        Text(text = ".",
+                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp),
+                            color= MaterialTheme.colors.onBackground,
+                            style = MaterialTheme.typography.subtitle2)
+                        Spacer(modifier = Modifier.height(235.dp))
+                        Text(text = "DoTA 2",
+                            modifier = Modifier.padding(horizontal = 4.dp, vertical = 3.dp),
+                            color= MaterialTheme.colors.onBackground,
+                            style = MaterialTheme.typography.subtitle2,
+                            fontSize = 30.sp)
+                        Row{
+                            for (i in 0..4)
+                                Star_full(i)
+
+                            Spacer(modifier = Modifier.width(6.dp))
+                            Text(
+                                text="70M",
+                                modifier=Modifier.padding(horizontal=4.dp),
+                                color = Color(198, 195, 181, 128), //белому не идёт
+                                style = MaterialTheme.typography.body2,
+                                fontSize = 12.sp,
+                                textAlign = TextAlign.End
+                            )
+                        }
+                    }
+                }
+
             }
         }
         item {
@@ -91,10 +122,49 @@ fun Greeting(messages: List<Message>) {
             }
         }
         item{
-            Text(text = "Review & Ratings",
-                modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp),
-                color= MaterialTheme.colors.onBackground,
-                style = MaterialTheme.typography.subtitle2)
+            Column{
+                Text(text = "Review & Ratings",
+                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp),
+                    color= MaterialTheme.colors.onBackground,
+                    style = MaterialTheme.typography.subtitle2,
+                    fontSize = 20.sp)
+                Row {
+
+                    Text(
+                        text = "4.9",
+                        modifier = Modifier.padding(horizontal = 12.dp),
+                        color = MaterialTheme.colors.onBackground,
+                        style = MaterialTheme.typography.subtitle2,
+                        fontSize = 50.sp
+                    )
+                    Column {
+                        Spacer(modifier = Modifier.height(18.dp))
+                        Row{
+                            for (i in 0..3)
+                                Star_full(i)
+
+                            Image(
+                                painter = painterResource(R.drawable.star_semi1),
+                                contentDescription = "fifth star",
+                                modifier = Modifier
+                                    .padding(horizontal = 4.dp)
+                                    .size(16.dp, 16.dp),
+                                alignment = Alignment.BottomEnd
+                            )
+                        }
+                        Spacer(modifier = Modifier.height(2.dp))
+                        Text(
+                            text="70M Reviews",
+                            modifier=Modifier.padding(horizontal=4.dp),
+                            color = Color(198, 195, 181, 255), //белому не идёт
+                            style = MaterialTheme.typography.body2
+                        )
+
+                    }
+                }
+                Spacer(modifier = Modifier.height(12.dp))
+            }
+
         }
 
         items(messages){message ->
@@ -132,6 +202,19 @@ fun DefaultPreview() {
         Greeting(SampleData.feedbackSample)
     }
 }
+@Composable
+fun Star_full(iteration:Int){
+    Students_camp_practiseTheme {
+        Image(
+            painter = painterResource(R.drawable.star_full),
+            contentDescription = "$iteration star",
+            modifier = Modifier
+                .padding(horizontal = 4.dp)
+                .size(16.dp, 16.dp),
+            alignment = Alignment.BottomEnd
+        )
+    }
+}
 
 @Composable
 fun Every_user_review(msg:Message){
@@ -142,7 +225,7 @@ fun Every_user_review(msg:Message){
 
                 Row(modifier = Modifier.padding(all = 8.dp)) {
                     Image(
-                        painter = painterResource(R.drawable.user_logo),
+                        painter = painterResource(msg.u_logo),
                         contentDescription = "user profile logo",
                         modifier = Modifier
                             .size(50.dp)
@@ -150,11 +233,12 @@ fun Every_user_review(msg:Message){
                             .border(1.dp, color = Color(244, 209, 68, 255), CircleShape)
                     )
 
-                    Column (modifier = Modifier.padding(all = 8.dp)) {
+                    Column (modifier = Modifier.padding(all = 6.dp)) {
                         Text(
                             msg.author,
                             color = MaterialTheme.colors.onBackground,
-                            style = MaterialTheme.typography.body2
+                            style = MaterialTheme.typography.body2,
+                            fontSize = 16.sp
                         )
 
                         Text(
@@ -167,7 +251,8 @@ fun Every_user_review(msg:Message){
                 }
                 Text(msg.body,
                     color= MaterialTheme.colors.onBackground,
-                    style = MaterialTheme.typography.body2)
+                    style = MaterialTheme.typography.body2,
+                    modifier = Modifier.padding(horizontal=12.dp))
             }
         }
     }
@@ -177,11 +262,12 @@ object SampleData {
         Message(
             "Auguste Conte",
             "February 14, 2019",
-            "Once you start to learn its secrets, there’s a wild and exciting variety of play here that’s unmatched, even by its peers."
+            "Once you start to learn its secrets, there’s a wild and exciting variety of play here that’s unmatched, even by its peers.",
+            R.drawable.user_logo
         ),
         Message(
-            "Auguste Conte",
-            "February 14, 2019",
+            "Jang Marcelino",
+            "November 12, 2017",
             "List of Android versions:\n" +
                     "Android KitKat (API 19)\n" +
                     "Android Lollipop (API 21)\n" +
@@ -191,13 +277,15 @@ object SampleData {
                     "Android Pie (API 28)\n" +
                     "Android 10 (API 29)\n" +
                     "Android 11 (API 30)\n" +
-                    "Android 12 (API 31)\n"
+                    "Android 12 (API 31)\n",
+            R.drawable.user_logo_1
         ),
         Message(
-            "Auguste Conte",
-            "February 14, 2019",
-            "I think Kotlin is my favorite programming language.\n" +
-                    "It's so much fun!"
+            "Lisa Ajax",
+            "February 5, 2016",
+            "I think Kotlin will be my favorite programming language.\n" +
+                    "It's so much fun!",
+            R.drawable.user_logo_2
         ),
     )
 }
