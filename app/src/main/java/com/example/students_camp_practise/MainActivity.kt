@@ -5,14 +5,17 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -98,12 +101,26 @@ fun Greeting(messages: List<Message>) {
             }
         }
         item {
-            Text(text = "Dota 2 is a multiplayer online battle arena (MOBA) game which has two teams of five players compete to collectively destroy a large structure defended by the opposing team known as the \"Ancient\", whilst defending their own.",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 12.dp, vertical = 12.dp),
-                color= MaterialTheme.colors.onBackground,
-                style = MaterialTheme.typography.body2)
+            var isExpanded by remember { mutableStateOf(false) }
+            val surfaceColor by animateColorAsState(
+                if (isExpanded) Color(244, 209, 68, 240) else MaterialTheme.colors.surface,
+            )
+            Surface(shape = MaterialTheme.shapes.medium,
+                    elevation = 0.5.dp,
+                    color= surfaceColor,
+                    modifier = Modifier
+                    .clickable { isExpanded = !isExpanded }
+                    .animateContentSize().padding(1.dp)) {
+                Text(
+                    text = "Dota 2 is a multiplayer online battle arena (MOBA) game which has two teams of five players compete to collectively destroy a large structure defended by the opposing team known as the \"Ancient\", whilst defending their own.",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 12.dp, vertical = 12.dp),
+                    color = MaterialTheme.colors.onBackground,
+                    style = MaterialTheme.typography.body2,
+                    maxLines = if (isExpanded) Int.MAX_VALUE else 2
+                )
+            }
         }
         item{
             Row{
@@ -219,40 +236,51 @@ fun Star_full(iteration:Int){
 @Composable
 fun Every_user_review(msg:Message){
     Students_camp_practiseTheme {
-        Surface {
-            Column (modifier = Modifier.padding(horizontal = 12.dp, vertical =8.dp )){
+        var isExpanded by remember { mutableStateOf(false) }
+        val surfaceColor by animateColorAsState(
+            if (isExpanded) Color(244, 209, 68, 240) else MaterialTheme.colors.surface,
+        )
+        Column (modifier = Modifier.padding(horizontal = 12.dp, vertical =8.dp )){
+            Row(modifier = Modifier.padding(all = 8.dp)) {
+                Image(
+                    painter = painterResource(msg.u_logo),
+                    contentDescription = "user profile logo",
+                    modifier = Modifier
+                        .size(50.dp)
+                        .clip(CircleShape)
+                        .border(1.dp, color = Color(244, 209, 68, 255), CircleShape)
+                )
 
-
-                Row(modifier = Modifier.padding(all = 8.dp)) {
-                    Image(
-                        painter = painterResource(msg.u_logo),
-                        contentDescription = "user profile logo",
-                        modifier = Modifier
-                            .size(50.dp)
-                            .clip(CircleShape)
-                            .border(1.dp, color = Color(244, 209, 68, 255), CircleShape)
+                Column (modifier = Modifier.padding(all = 6.dp)) {
+                    Text(
+                        msg.author,
+                        color = MaterialTheme.colors.onBackground,
+                        style = MaterialTheme.typography.body2,
+                        fontSize = 16.sp
                     )
 
-                    Column (modifier = Modifier.padding(all = 6.dp)) {
-                        Text(
-                            msg.author,
-                            color = MaterialTheme.colors.onBackground,
-                            style = MaterialTheme.typography.body2,
-                            fontSize = 16.sp
-                        )
-
-                        Text(
-                            msg.time,
-                            color = Color(220, 220, 220, 128), //белому не идёт
-                            style = MaterialTheme.typography.body2
-                        )
-                    }
-
+                    Text(
+                        msg.time,
+                        color = Color(220, 220, 220, 128), //белому не идёт
+                        style = MaterialTheme.typography.body2
+                    )
                 }
-                Text(msg.body,
-                    color= MaterialTheme.colors.onBackground,
+
+            }
+            Surface(shape = MaterialTheme.shapes.medium,
+                elevation =0.5.dp,
+                color= surfaceColor,
+                modifier=Modifier
+                    .animateContentSize()
+                    .clickable { isExpanded = !isExpanded }
+                    .padding(1.dp)) {
+                Text(
+                    msg.body,
+                    color = MaterialTheme.colors.onBackground,
                     style = MaterialTheme.typography.body2,
-                    modifier = Modifier.padding(horizontal=12.dp))
+                    modifier = Modifier.padding(horizontal = 12.dp),
+                    maxLines = if (isExpanded) Int.MAX_VALUE else 2
+                )
             }
         }
     }
