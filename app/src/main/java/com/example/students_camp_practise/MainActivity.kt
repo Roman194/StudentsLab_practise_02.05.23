@@ -100,6 +100,72 @@ fun Greeting(messages: List<Message>) {
 
             }
         }
+        item{
+            var isExpanded by remember { mutableStateOf(false) }
+            Box(modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight()
+                .padding(vertical=8.dp)){
+                Row(modifier=Modifier.padding(horizontal=12.dp)){
+                    Image(
+                        painter = painterResource(R.drawable.tag),
+                        contentDescription = "logo tag",
+                        modifier = Modifier.size(53.dp, 22.dp)
+                            .clickable { isExpanded = !isExpanded
+                                Toast.makeText(context,"Like MOBA? \nYou will have ability to install it in next versions of our app ;)",Toast.LENGTH_LONG).show()},
+                        alignment = Alignment.BottomEnd
+                    )
+                    Spacer(modifier = Modifier.width(6.dp))
+                    Image(
+                        painter = painterResource(R.drawable.tag_1),
+                        contentDescription = "logo tag 1",
+                        modifier = Modifier.size(93.dp, 22.dp)
+                            .clickable { isExpanded = !isExpanded
+                                Toast.makeText(context,"Like multiplayer gaming? \nYou will have ability to install this and other multiplayer games in next versions of our app ;)",Toast.LENGTH_LONG).show()},
+                        alignment = Alignment.BottomEnd
+                    )
+                    Spacer(modifier = Modifier.width(6.dp))
+                    Image(
+                        painter = painterResource(R.drawable.tag_2),
+                        contentDescription = "logo tag 2",
+                        modifier = Modifier.size(73.dp, 22.dp)
+                            .clickable { isExpanded = !isExpanded
+                                Toast.makeText(context,"Like strategies? \nYou will have ability to install this and other strategy games in next versions of our app ;)",Toast.LENGTH_LONG).show()},
+                        alignment = Alignment.BottomEnd
+                    )
+
+                }
+                Row(modifier=Modifier.padding(horizontal=12.dp)) {
+                    Text(
+                        text = "MOBA",
+                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp),
+                        color = Color(68, 169, 244, 255),
+                        style = MaterialTheme.typography.body2,
+                        fontSize = 12.sp,
+                        textAlign = TextAlign.End
+                    )
+                    Spacer(modifier = Modifier.width(6.dp))
+                    Text(
+                        text = "MULTIPLAYER",
+                        modifier = Modifier.padding(horizontal = 5.dp, vertical = 3.dp),
+                        color = Color(68, 169, 244, 255),
+                        style = MaterialTheme.typography.body2,
+                        fontSize = 12.sp,
+                        textAlign = TextAlign.End
+                    )
+                    Spacer(modifier = Modifier.width(6.dp))
+                    Text(
+                        text = "STRATEGY",
+                        modifier = Modifier.padding(horizontal = 6.dp, vertical = 3.dp),
+                        color = Color(68, 169, 244, 255),
+                        style = MaterialTheme.typography.body2,
+                        fontSize = 12.sp,
+                        textAlign = TextAlign.End
+                    )
+                }
+            }
+
+        }
         item {
             var isExpanded by remember { mutableStateOf(false) }
             val surfaceColor by animateColorAsState(
@@ -288,13 +354,13 @@ fun Every_user_review(msg:Message){
 object SampleData {
     val feedbackSample = listOf(
         Message(
-            "Auguste Conte",
+            "Marius Conte",
             "February 14, 2019",
             "Once you start to learn its secrets, there’s a wild and exciting variety of play here that’s unmatched, even by its peers.",
-            R.drawable.user_logo
+            R.drawable.user_logo_3
         ),
         Message(
-            "Jang Marcelino",
+            "Maria Marcelino",
             "November 12, 2017",
             "List of Android versions:\n" +
                     "Android KitKat (API 19)\n" +
@@ -306,7 +372,7 @@ object SampleData {
                     "Android 10 (API 29)\n" +
                     "Android 11 (API 30)\n" +
                     "Android 12 (API 31)\n",
-            R.drawable.user_logo_1
+            R.drawable.user_logo_5
         ),
         Message(
             "Lisa Ajax",
