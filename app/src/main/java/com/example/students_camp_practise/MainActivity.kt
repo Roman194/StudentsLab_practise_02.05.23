@@ -1,6 +1,10 @@
 package com.example.students_camp_practise
 
+import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
 import android.content.res.Configuration
+import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -26,7 +30,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
 import com.example.students_camp_practise.ui.theme.Students_camp_practiseTheme
+import com.google.android.exoplayer2.SimpleExoPlayer
+import com.google.android.exoplayer2.source.ProgressiveMediaSource
+import com.google.android.exoplayer2.ui.PlayerView
+import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
+import com.google.android.exoplayer2.util.Util
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -105,32 +115,59 @@ fun Greeting(messages: List<Message>) {
             Box(modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight()
-                .padding(vertical=8.dp)){
+                .padding(vertical = 8.dp)){
                 Row(modifier=Modifier.padding(horizontal=12.dp)){
                     Image(
                         painter = painterResource(R.drawable.tag),
                         contentDescription = "logo tag",
-                        modifier = Modifier.size(53.dp, 22.dp)
-                            .clickable { isExpanded = !isExpanded
-                                Toast.makeText(context,"Like MOBA? \nYou will have ability to install it in next versions of our app ;)",Toast.LENGTH_LONG).show()},
+                        modifier = Modifier
+                            .size(53.dp, 22.dp)
+                            .clickable {
+                                isExpanded = !isExpanded
+                                Toast
+                                    .makeText(
+                                        context,
+                                        "Like MOBA? \nYou will have ability to install it in next versions of our app ;)",
+                                        Toast.LENGTH_LONG
+                                    )
+                                    .show()
+                            },
                         alignment = Alignment.BottomEnd
                     )
                     Spacer(modifier = Modifier.width(6.dp))
                     Image(
                         painter = painterResource(R.drawable.tag_1),
                         contentDescription = "logo tag 1",
-                        modifier = Modifier.size(93.dp, 22.dp)
-                            .clickable { isExpanded = !isExpanded
-                                Toast.makeText(context,"Like multiplayer gaming? \nYou will have ability to install this and other multiplayer games in next versions of our app ;)",Toast.LENGTH_LONG).show()},
+                        modifier = Modifier
+                            .size(93.dp, 22.dp)
+                            .clickable {
+                                isExpanded = !isExpanded
+                                Toast
+                                    .makeText(
+                                        context,
+                                        "Like multiplayer gaming? \nYou will have ability to install this and other multiplayer games in next versions of our app ;)",
+                                        Toast.LENGTH_LONG
+                                    )
+                                    .show()
+                            },
                         alignment = Alignment.BottomEnd
                     )
                     Spacer(modifier = Modifier.width(6.dp))
                     Image(
                         painter = painterResource(R.drawable.tag_2),
                         contentDescription = "logo tag 2",
-                        modifier = Modifier.size(73.dp, 22.dp)
-                            .clickable { isExpanded = !isExpanded
-                                Toast.makeText(context,"Like strategies? \nYou will have ability to install this and other strategy games in next versions of our app ;)",Toast.LENGTH_LONG).show()},
+                        modifier = Modifier
+                            .size(73.dp, 22.dp)
+                            .clickable {
+                                isExpanded = !isExpanded
+                                Toast
+                                    .makeText(
+                                        context,
+                                        "Like strategies? \nYou will have ability to install this and other strategy games in next versions of our app ;)",
+                                        Toast.LENGTH_LONG
+                                    )
+                                    .show()
+                            },
                         alignment = Alignment.BottomEnd
                     )
 
@@ -175,8 +212,9 @@ fun Greeting(messages: List<Message>) {
                     elevation = 0.5.dp,
                     color= surfaceColor,
                     modifier = Modifier
-                    .clickable { isExpanded = !isExpanded }
-                    .animateContentSize().padding(1.dp)) {
+                        .clickable { isExpanded = !isExpanded }
+                        .animateContentSize()
+                        .padding(1.dp)) {
                 Text(
                     text = "Dota 2 is a multiplayer online battle arena (MOBA) game which has two teams of five players compete to collectively destroy a large structure defended by the opposing team known as the \"Ancient\", whilst defending their own.",
                     modifier = Modifier
@@ -189,19 +227,48 @@ fun Greeting(messages: List<Message>) {
             }
         }
         item{
-            Row{
-                Image(
-                    painter = painterResource(R.drawable.description_picture),
-                    contentDescription = "app screen",
-                    modifier = Modifier.size(250.dp, 128.dp),
-                    alignment = Alignment.BottomEnd
-                )
-                Image(
-                    painter = painterResource(R.drawable.description_picture_1),
-                    contentDescription = "app screen 1",
-                    modifier = Modifier.size(240.dp, 128.dp),
-                    alignment = Alignment.BottomEnd
-                )
+            var isExpanded by remember { mutableStateOf(false) }
+            Box {
+                Row {
+                    Image(
+                        painter = painterResource(R.drawable.description_picture),
+                        contentDescription = "app screen",
+                        modifier = Modifier
+                            .size(250.dp, 128.dp)
+                            .clickable {
+                                isExpanded = !isExpanded
+                                Toast
+                                    .makeText(
+                                        context,
+                                        "Should have opened activity",
+                                        Toast.LENGTH_LONG
+                                    )
+                                    .show()
+                                //Play_video(context)
+                                context.startActivity(Intent(context,VideoActivity::class.java))
+                            },
+                        alignment = Alignment.BottomEnd
+                    )
+                    Image(
+                        painter = painterResource(R.drawable.description_picture_1),
+                        contentDescription = "app screen 1",
+                        modifier = Modifier.size(240.dp, 128.dp),
+                        alignment = Alignment.BottomEnd
+                    )
+                }
+                Row {
+                    Text(text = "",
+                        color= MaterialTheme.colors.onBackground,
+                        style = MaterialTheme.typography.subtitle2)
+                    Spacer(modifier = Modifier.width(88.dp))
+
+                    Image(
+                        painter = painterResource(R.drawable.video_symbol),
+                        contentDescription = "video symbol",
+                        modifier = Modifier.size(80.dp,128.dp),
+                        alignment = Alignment.Center
+                    )
+                }
             }
         }
         item{
@@ -299,6 +366,7 @@ fun Star_full(iteration:Int){
     }
 }
 
+
 @Composable
 fun Every_user_review(msg:Message){
     Students_camp_practiseTheme {
@@ -336,7 +404,7 @@ fun Every_user_review(msg:Message){
             Surface(shape = MaterialTheme.shapes.medium,
                 elevation =0.5.dp,
                 color= surfaceColor,
-                modifier=Modifier
+                modifier= Modifier
                     .animateContentSize()
                     .clickable { isExpanded = !isExpanded }
                     .padding(1.dp)) {
