@@ -240,7 +240,7 @@ fun Greeting(messages: List<Message>) {
                                 Toast
                                     .makeText(
                                         context,
-                                        "Should have opened activity",
+                                        "There will be MOBA video snippet in next versions :)\n Now you already can enjoy a ralli!!!",
                                         Toast.LENGTH_LONG
                                     )
                                     .show()
