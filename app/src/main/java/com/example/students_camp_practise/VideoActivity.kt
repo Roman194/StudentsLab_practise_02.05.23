@@ -17,8 +17,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.example.students_camp_practise.ui.theme.Students_camp_practiseTheme
 import com.google.android.exoplayer2.SimpleExoPlayer
@@ -38,28 +40,48 @@ class VideoActivity: ComponentActivity(){
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    Column{
-                        val context = LocalContext.current
 
-                        Button(onClick = { context.startActivity(Intent(context,MainActivity::class.java)) },
-                            modifier= Modifier
-                                .size(width = 120.dp, height = 100.dp)
-                                .padding(horizontal = 18.dp, vertical = 18.dp),
-                            colors = ButtonDefaults.buttonColors(backgroundColor = Color(244, 209, 68, 240))
-                        ) {
-                            Text(text = "  <- \nBack",
-                                style = MaterialTheme.typography.button,
-                                color = MaterialTheme.colors.onBackground
-                            )
-                        }
-                        Spacer(modifier = Modifier.height(175.dp))
-                        Play_video(context)
+                    //Column{
+
+
+                    //    Button(onClick = { context.startActivity(Intent(context,MainActivity::class.java)) },
+                    //        modifier= Modifier
+                    //            .size(width = 120.dp, height = 100.dp)
+                    //            .padding(horizontal = 18.dp, vertical = 18.dp),
+                    //        colors = ButtonDefaults.buttonColors(backgroundColor = Color(244, 209, 68, 240))
+                    //    ) {
+                    //        Text(text = "  <- \nBack",
+                    //            style = MaterialTheme.typography.button,
+                     //           color = MaterialTheme.colors.onBackground
+                     //       )
+                    //    }
+                    //    Spacer(modifier = Modifier.height(175.dp))
+                    VideoAct()
+
                     }
 
                 }
             }
         }
     }
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
+@Composable
+fun VideoAct() {
+    val context = LocalContext.current
+    Scaffold(topBar = {TopAppBar {
+        IconButton(onClick = { context.startActivity(Intent(context,MainActivity::class.java))}) {
+            Icon(painter = painterResource(id = android.R.drawable.ic_menu_close_clear_cancel), contentDescription ="BackIcon" ,)//сырое доделать!
+        }
+        Text("DoTA 2 Video preview", fontSize = 22.sp)
+    } },
+        backgroundColor = Color(244, 209, 68, 240))
+    {
+
+        Play_video(context)
+    }
+    
+
+}
 
     @SuppressLint("RememberReturnType")
     @Composable
@@ -93,10 +115,8 @@ class VideoActivity: ComponentActivity(){
         name="Darkest Mode")
 
     @Composable
-    fun DefaultPreview() {
+    fun DefaultPreview_2() {
         Students_camp_practiseTheme {
-            val context= LocalContext.current
-            Play_video(context)
+            VideoAct()
         }
     }
-}

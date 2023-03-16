@@ -12,6 +12,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -24,10 +25,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -37,6 +41,9 @@ import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.ui.PlayerView
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
+import me.onebone.toolbar.CollapsingToolbarScaffold
+import me.onebone.toolbar.ScrollStrategy
+import me.onebone.toolbar.rememberCollapsingToolbarScaffoldState
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,280 +66,384 @@ data class Message(val author: String,val time: String, val body: String, val u_
 @Composable
 fun Greeting(messages: List<Message>) {
     val context=LocalContext.current
-    LazyColumn{
-        item {
+    val state = rememberCollapsingToolbarScaffoldState()
+
+    CollapsingToolbarScaffold(
+        modifier = Modifier
+            .fillMaxSize(),
+        state = state,
+        scrollStrategy = ScrollStrategy.ExitUntilCollapsed,
+        toolbar = {
+            val textSize = (18 + (30 - 18) * state.toolbarState.progress).sp
+            val miniTextSize =(18 + (20 - 18) * state.toolbarState.progress).sp
+
             Box(
                 modifier = Modifier
+                    .background(color = Color(244, 209, 68, 255))
                     .fillMaxWidth()
-                    .fillMaxHeight()
-            ) {
-                Image(
-                    painter = painterResource(R.drawable.mask_group_cutted),
-                    contentDescription = "Background picture",
-                    modifier = Modifier.size(392.dp, 309.dp),
-                    alignment = Alignment.TopCenter
-                )
-                Row {
+                    .height(200.dp)
+                    .pin()
+            )
 
-                    Image(
-                        painter = painterResource(R.drawable.mask_logo),
-                        contentDescription = "logo picture",
-                        modifier = Modifier.size(149.dp, 395.dp),
-                        alignment = Alignment.BottomEnd
+
+            Image(
+                modifier = Modifier
+                    .pin()
+                    .size(392.dp, 309.dp),
+                painter = painterResource(id = R.drawable.back_picture_2),
+                contentDescription = "background picture",
+                alignment = Alignment.TopCenter,
+                contentScale = ContentScale.Crop,
+                alpha=if(textSize.value==18f) 0f else 1f
+            )
+
+            Image(
+                painter = painterResource(id = R.drawable.mask_logo_2),
+                contentDescription = "logo picture",
+                alignment = Alignment.BottomEnd,
+                modifier = Modifier.size(143.dp,390.dp)
+            )
+            Text(text="70M",
+                modifier= Modifier
+                    .road(whenCollapsed = Alignment.BottomStart, whenExpanded = Alignment.TopEnd)
+                    .padding(vertical = 16.dp, horizontal = 85.dp),
+                color = if(miniTextSize.value==18f) Color(255, 255, 255, 255) else Color(198, 195, 181, 128), //белому не идёт
+                style = MaterialTheme.typography.body2,
+                textAlign = TextAlign.Center,
+                fontSize = if(miniTextSize.value<=19f)18.sp else 0.sp
+            )
+            Text(
+                text = "DoTA 2",
+                modifier = Modifier
+                    .road(Alignment.CenterStart, Alignment.BottomCenter)
+                    .padding(16.dp, 16.dp, 16.dp, 16.dp),
+                color = Color.White,
+                style=MaterialTheme.typography.subtitle2,
+                fontSize = textSize
+            )
+
+
+
+        }
+    ) {
+
+                //Image(
+                //    painter = painterResource(R.drawable.back_picture_2),
+                //    contentDescription = "Background picture",
+                //    //modifier = Modifier.size(392.dp, 309.dp),
+                 //   modifier = Modifier.fillMaxWidth().height(150.dp),
+                 //   alignment = Alignment.TopCenter,
+                 //   contentScale = ContentScale.Crop,
+                    //alpha=if(textSize.value==18f) 0f else 1f
+                  //  alpha=1f
+               // )
+               // Row {
+
+                    //Image(
+                    //    painter = painterResource(R.drawable.mask_logo),
+                   //     contentDescription = "logo picture",
+                   //     modifier = Modifier.size(149.dp, 395.dp),
+                    //    alignment = Alignment.BottomEnd,
+                    //    alpha=if(textSize.value==18f) 0f else 1f
+                    //)
+                    //Column(modifier = Modifier.size(width =180.dp, height = 395.dp)){
+                        //Text(text = "",
+                        //    modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp),
+                        //    color= MaterialTheme.colors.onBackground,
+                        //    style = MaterialTheme.typography.subtitle2)
+                        //Spacer(modifier = Modifier.height(235.dp))
+                    //Text(text = "DoTA 2",
+                    //        modifier = Modifier.padding(horizontal = 4.dp, vertical = 3.dp)
+                    //                            .road(whenCollapsed = Alignment.TopStart, whenExpanded = Alignment.BottomStart),
+                    //        color= MaterialTheme.colors.onBackground,
+                    //        style = MaterialTheme.typography.subtitle2,
+                     //       fontSize = textSize)//30.sp
+                        //Row{
+                        //    for (i in 0..4)
+                        //        Star_full(i,textSize,true)
+
+                        //    Spacer(modifier = Modifier.width(6.dp))
+                        //    Text(
+                        //        text="70M",
+                        //        modifier=Modifier.padding(horizontal=4.dp)
+                         //           .road(whenCollapsed = Alignment.TopStart, whenExpanded = Alignment.BottomStart),
+                         //       color = Color(198, 195, 181, 128), //белому не идёт
+                         //       style = MaterialTheme.typography.body2,
+                          //      fontSize = if(textSize.value==18f) 0.sp else 12.sp,
+                        //        textAlign = TextAlign.End
+                        //    )
+
+
+
+
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            item{
+                Row{
+                    Text(
+                        text = ""
                     )
-                    Column(modifier = Modifier.size(width =180.dp, height = 395.dp)){
-                        Text(text = ".",
-                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp),
-                            color= MaterialTheme.colors.onBackground,
-                            style = MaterialTheme.typography.subtitle2)
-                        Spacer(modifier = Modifier.height(235.dp))
-                        Text(text = "DoTA 2",
-                            modifier = Modifier.padding(horizontal = 4.dp, vertical = 3.dp),
-                            color= MaterialTheme.colors.onBackground,
-                            style = MaterialTheme.typography.subtitle2,
-                            fontSize = 30.sp)
-                        Row{
-                            for (i in 0..4)
-                                Star_full(i)
+                    Spacer(modifier = Modifier.width(129.dp))
 
-                            Spacer(modifier = Modifier.width(6.dp))
-                            Text(
-                                text="70M",
-                                modifier=Modifier.padding(horizontal=4.dp),
-                                color = Color(198, 195, 181, 128), //белому не идёт
-                                style = MaterialTheme.typography.body2,
-                                fontSize = 12.sp,
-                                textAlign = TextAlign.End
-                            )
-                        }
+                    for (i in 0..4)
+                        Star_full(i)
+                    Text(text="70M",
+                        modifier=Modifier.padding(horizontal=4.dp),
+                        color = Color(198, 195, 181, 128), //белому не идёт
+                        style = MaterialTheme.typography.body2,
+                        textAlign = TextAlign.End,
+                        fontSize = 16.sp
+                    )
+
+                }
+
+            }
+
+            item {
+                var isExpanded by remember { mutableStateOf(false) }
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight()
+                        .padding(vertical = 8.dp)
+                ) {
+                    Row(modifier = Modifier.padding(horizontal = 12.dp)) {
+                        Image(
+                            painter = painterResource(R.drawable.tag),
+                            contentDescription = "logo tag",
+                            modifier = Modifier
+                                .size(53.dp, 22.dp)
+                                .clickable {
+                                    isExpanded = !isExpanded
+                                    Toast
+                                        .makeText(
+                                            context,
+                                            "Like MOBA? \nYou will have ability to install it in next versions of our app ;)",
+                                            Toast.LENGTH_LONG
+                                        )
+                                        .show()
+                                },
+                            alignment = Alignment.BottomEnd
+                        )
+                        Spacer(modifier = Modifier.width(6.dp))
+                        Image(
+                            painter = painterResource(R.drawable.tag_1),
+                            contentDescription = "logo tag 1",
+                            modifier = Modifier
+                                .size(93.dp, 22.dp)
+                                .clickable {
+                                    isExpanded = !isExpanded
+                                    Toast
+                                        .makeText(
+                                            context,
+                                            "Like multiplayer gaming? \nYou will have ability to install this and other multiplayer games in next versions of our app ;)",
+                                            Toast.LENGTH_LONG
+                                        )
+                                        .show()
+                                },
+                            alignment = Alignment.BottomEnd
+                        )
+                        Spacer(modifier = Modifier.width(6.dp))
+                        Image(
+                            painter = painterResource(R.drawable.tag_2),
+                            contentDescription = "logo tag 2",
+                            modifier = Modifier
+                                .size(73.dp, 22.dp)
+                                .clickable {
+                                    isExpanded = !isExpanded
+                                    Toast
+                                        .makeText(
+                                            context,
+                                            "Like strategies? \nYou will have ability to install this and other strategy games in next versions of our app ;)",
+                                            Toast.LENGTH_LONG
+                                        )
+                                        .show()
+                                },
+                            alignment = Alignment.BottomEnd
+                        )
+
+                    }
+                    Row(modifier = Modifier.padding(horizontal = 12.dp)) {
+                        Text(
+                            text = "MOBA",
+                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp),
+                            color = Color(68, 169, 244, 255),
+                            style = MaterialTheme.typography.body2,
+                            fontSize = 12.sp,
+                            textAlign = TextAlign.End
+                        )
+                        Spacer(modifier = Modifier.width(6.dp))
+                        Text(
+                            text = "MULTIPLAYER",
+                            modifier = Modifier.padding(horizontal = 5.dp, vertical = 3.dp),
+                            color = Color(68, 169, 244, 255),
+                            style = MaterialTheme.typography.body2,
+                            fontSize = 12.sp,
+                            textAlign = TextAlign.End
+                        )
+                        Spacer(modifier = Modifier.width(6.dp))
+                        Text(
+                            text = "STRATEGY",
+                            modifier = Modifier.padding(horizontal = 6.dp, vertical = 3.dp),
+                            color = Color(68, 169, 244, 255),
+                            style = MaterialTheme.typography.body2,
+                            fontSize = 12.sp,
+                            textAlign = TextAlign.End
+                        )
                     }
                 }
 
             }
-        }
-        item{
-            var isExpanded by remember { mutableStateOf(false) }
-            Box(modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight()
-                .padding(vertical = 8.dp)){
-                Row(modifier=Modifier.padding(horizontal=12.dp)){
-                    Image(
-                        painter = painterResource(R.drawable.tag),
-                        contentDescription = "logo tag",
-                        modifier = Modifier
-                            .size(53.dp, 22.dp)
-                            .clickable {
-                                isExpanded = !isExpanded
-                                Toast
-                                    .makeText(
-                                        context,
-                                        "Like MOBA? \nYou will have ability to install it in next versions of our app ;)",
-                                        Toast.LENGTH_LONG
-                                    )
-                                    .show()
-                            },
-                        alignment = Alignment.BottomEnd
-                    )
-                    Spacer(modifier = Modifier.width(6.dp))
-                    Image(
-                        painter = painterResource(R.drawable.tag_1),
-                        contentDescription = "logo tag 1",
-                        modifier = Modifier
-                            .size(93.dp, 22.dp)
-                            .clickable {
-                                isExpanded = !isExpanded
-                                Toast
-                                    .makeText(
-                                        context,
-                                        "Like multiplayer gaming? \nYou will have ability to install this and other multiplayer games in next versions of our app ;)",
-                                        Toast.LENGTH_LONG
-                                    )
-                                    .show()
-                            },
-                        alignment = Alignment.BottomEnd
-                    )
-                    Spacer(modifier = Modifier.width(6.dp))
-                    Image(
-                        painter = painterResource(R.drawable.tag_2),
-                        contentDescription = "logo tag 2",
-                        modifier = Modifier
-                            .size(73.dp, 22.dp)
-                            .clickable {
-                                isExpanded = !isExpanded
-                                Toast
-                                    .makeText(
-                                        context,
-                                        "Like strategies? \nYou will have ability to install this and other strategy games in next versions of our app ;)",
-                                        Toast.LENGTH_LONG
-                                    )
-                                    .show()
-                            },
-                        alignment = Alignment.BottomEnd
-                    )
-
-                }
-                Row(modifier=Modifier.padding(horizontal=12.dp)) {
-                    Text(
-                        text = "MOBA",
-                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp),
-                        color = Color(68, 169, 244, 255),
-                        style = MaterialTheme.typography.body2,
-                        fontSize = 12.sp,
-                        textAlign = TextAlign.End
-                    )
-                    Spacer(modifier = Modifier.width(6.dp))
-                    Text(
-                        text = "MULTIPLAYER",
-                        modifier = Modifier.padding(horizontal = 5.dp, vertical = 3.dp),
-                        color = Color(68, 169, 244, 255),
-                        style = MaterialTheme.typography.body2,
-                        fontSize = 12.sp,
-                        textAlign = TextAlign.End
-                    )
-                    Spacer(modifier = Modifier.width(6.dp))
-                    Text(
-                        text = "STRATEGY",
-                        modifier = Modifier.padding(horizontal = 6.dp, vertical = 3.dp),
-                        color = Color(68, 169, 244, 255),
-                        style = MaterialTheme.typography.body2,
-                        fontSize = 12.sp,
-                        textAlign = TextAlign.End
-                    )
-                }
-            }
-
-        }
-        item {
-            var isExpanded by remember { mutableStateOf(false) }
-            val surfaceColor by animateColorAsState(
-                if (isExpanded) Color(244, 209, 68, 240) else MaterialTheme.colors.surface,
-            )
-            Surface(shape = MaterialTheme.shapes.medium,
+            item {
+                var isExpanded by remember { mutableStateOf(false) }
+                val surfaceColor by animateColorAsState(
+                    if (isExpanded) Color(244, 209, 68, 240) else MaterialTheme.colors.surface,
+                )
+                Surface(shape = MaterialTheme.shapes.medium,
                     elevation = 0.5.dp,
-                    color= surfaceColor,
+                    color = surfaceColor,
                     modifier = Modifier
                         .clickable { isExpanded = !isExpanded }
                         .animateContentSize()
                         .padding(1.dp)) {
-                Text(
-                    text = "Dota 2 is a multiplayer online battle arena (MOBA) game which has two teams of five players compete to collectively destroy a large structure defended by the opposing team known as the \"Ancient\", whilst defending their own.",
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 12.dp, vertical = 12.dp),
-                    color = MaterialTheme.colors.onBackground,
-                    style = MaterialTheme.typography.body2,
-                    maxLines = if (isExpanded) Int.MAX_VALUE else 2
-                )
-            }
-        }
-        item{
-            var isExpanded by remember { mutableStateOf(false) }
-            Box {
-                Row {
-                    Image(
-                        painter = painterResource(R.drawable.description_picture),
-                        contentDescription = "app screen",
-                        modifier = Modifier
-                            .size(250.dp, 128.dp)
-                            .clickable {
-                                isExpanded = !isExpanded
-                                Toast
-                                    .makeText(
-                                        context,
-                                        "There will be MOBA video snippet in next versions :)\n Now you already can enjoy a ralli!!!",
-                                        Toast.LENGTH_LONG
-                                    )
-                                    .show()
-                                //Play_video(context)
-                                context.startActivity(Intent(context,VideoActivity::class.java))
-                            },
-                        alignment = Alignment.BottomEnd
-                    )
-                    Image(
-                        painter = painterResource(R.drawable.description_picture_1),
-                        contentDescription = "app screen 1",
-                        modifier = Modifier.size(240.dp, 128.dp),
-                        alignment = Alignment.BottomEnd
-                    )
-                }
-                Row {
-                    Text(text = "",
-                        color= MaterialTheme.colors.onBackground,
-                        style = MaterialTheme.typography.subtitle2)
-                    Spacer(modifier = Modifier.width(88.dp))
-
-                    Image(
-                        painter = painterResource(R.drawable.video_symbol),
-                        contentDescription = "video symbol",
-                        modifier = Modifier.size(80.dp,128.dp),
-                        alignment = Alignment.Center
-                    )
-                }
-            }
-        }
-        item{
-            Column{
-                Text(text = "Review & Ratings",
-                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp),
-                    color= MaterialTheme.colors.onBackground,
-                    style = MaterialTheme.typography.subtitle2,
-                    fontSize = 20.sp)
-                Row {
-
                     Text(
-                        text = "4.9",
-                        modifier = Modifier.padding(horizontal = 12.dp),
+                        text = "Dota 2 is a multiplayer online battle arena (MOBA) game which has two teams of five players compete to collectively destroy a large structure defended by the opposing team known as the \"Ancient\", whilst defending their own.",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 12.dp, vertical = 12.dp),
                         color = MaterialTheme.colors.onBackground,
-                        style = MaterialTheme.typography.subtitle2,
-                        fontSize = 50.sp
+                        style = MaterialTheme.typography.body2,
+                        maxLines = if (isExpanded) Int.MAX_VALUE else 2
                     )
-                    Column {
-                        Spacer(modifier = Modifier.height(18.dp))
-                        Row{
-                            for (i in 0..3)
-                                Star_full(i)
-
-                            Image(
-                                painter = painterResource(R.drawable.star_semi1),
-                                contentDescription = "fifth star",
-                                modifier = Modifier
-                                    .padding(horizontal = 4.dp)
-                                    .size(16.dp, 16.dp),
-                                alignment = Alignment.BottomEnd
-                            )
-                        }
-                        Spacer(modifier = Modifier.height(2.dp))
-                        Text(
-                            text="70M Reviews",
-                            modifier=Modifier.padding(horizontal=4.dp),
-                            color = Color(198, 195, 181, 255), //белому не идёт
-                            style = MaterialTheme.typography.body2
+                }
+            }
+            item {
+                var isExpanded by remember { mutableStateOf(false) }
+                Box {
+                    Row {
+                        Image(
+                            painter = painterResource(R.drawable.description_picture),
+                            contentDescription = "app screen",
+                            modifier = Modifier
+                                .size(250.dp, 128.dp)
+                                .clickable {
+                                    isExpanded = !isExpanded
+                                    Toast
+                                        .makeText(
+                                            context,
+                                            "There will be MOBA video snippet in next versions :)\n Now you already can enjoy a ralli!!!",
+                                            Toast.LENGTH_LONG
+                                        )
+                                        .show()
+                                    //Play_video(context)
+                                    context.startActivity(
+                                        Intent(
+                                            context,
+                                            VideoActivity::class.java
+                                        )
+                                    )
+                                },
+                            alignment = Alignment.BottomEnd
                         )
+                        Image(
+                            painter = painterResource(R.drawable.description_picture_1),
+                            contentDescription = "app screen 1",
+                            modifier = Modifier.size(240.dp, 128.dp),
+                            alignment = Alignment.BottomEnd
+                        )
+                    }
+                    Row {
+                        Text(
+                            text = "",
+                            color = MaterialTheme.colors.onBackground,
+                            style = MaterialTheme.typography.subtitle2
+                        )
+                        Spacer(modifier = Modifier.width(88.dp))
 
+                        Image(
+                            painter = painterResource(R.drawable.video_symbol),
+                            contentDescription = "video symbol",
+                            modifier = Modifier.size(80.dp, 128.dp),
+                            alignment = Alignment.Center
+                        )
                     }
                 }
-                Spacer(modifier = Modifier.height(12.dp))
+            }
+            item {
+                Column {
+                    Text(
+                        text = "Review & Ratings",
+                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp),
+                        color = MaterialTheme.colors.onBackground,
+                        style = MaterialTheme.typography.subtitle2,
+                        fontSize = 20.sp
+                    )
+                    Row {
+
+                        Text(
+                            text = "4.9",
+                            modifier = Modifier.padding(horizontal = 12.dp),
+                            color = MaterialTheme.colors.onBackground,
+                            style = MaterialTheme.typography.subtitle2,
+                            fontSize = 50.sp
+                        )
+                        Column {
+                            Spacer(modifier = Modifier.height(18.dp))
+                            Row {
+                                for (i in 0..3)
+                                    Star_full(i)
+
+                                Image(
+                                    painter = painterResource(R.drawable.star_semi1),
+                                    contentDescription = "fifth star",
+                                    modifier = Modifier
+                                        .padding(vertical = 1.5.dp)
+                                        .size(16.dp, 16.dp),
+                                    alignment = Alignment.BottomEnd
+                                )
+                            }
+                            Spacer(modifier = Modifier.height(2.dp))
+                            Text(
+                                text = "70M Reviews",
+                                modifier = Modifier.padding(horizontal = 4.dp),
+                                color = Color(198, 195, 181, 255), //белому не идёт
+                                style = MaterialTheme.typography.body2
+                            )
+
+                        }
+                    }
+                    Spacer(modifier = Modifier.height(12.dp))
+                }
+
             }
 
-        }
-
-        items(messages){message ->
-            Every_user_review(message)
-        }
-        item{
-            Spacer(modifier = Modifier.height(12.dp))
-            Button(onClick = { Toast.makeText(context,"Sorry, can't install it now \nYou will have ability to install it in next versions of app",Toast.LENGTH_LONG).show() },
-                modifier= Modifier
-                    .fillMaxWidth()
-                    .size(width = 327.dp, height = 80.dp)
-                    .padding(horizontal = 18.dp, vertical = 18.dp),
-                colors = ButtonDefaults.buttonColors(backgroundColor = Color(244, 209, 68, 255))
-            ) {
-                Text(text = "Install",
-                style = MaterialTheme.typography.button,
-                color = Color(7, 7, 7, 255)
-                )
+            items(messages) { message ->
+                Every_user_review(message)
+            }
+            item {
+                Spacer(modifier = Modifier.height(12.dp))
+                Button(
+                    onClick = {
+                        Toast.makeText(
+                            context,
+                            "Sorry, can't install it now \nYou will have ability to install it in next versions of app",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .size(width = 327.dp, height = 80.dp)
+                        .padding(horizontal = 18.dp, vertical = 18.dp),
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(244, 209, 68, 255))
+                ) {
+                    Text(
+                        text = "Install",
+                        style = MaterialTheme.typography.button,
+                        color = Color(7, 7, 7, 255)
+                    )
+                }
             }
         }
     }
@@ -359,10 +470,11 @@ fun Star_full(iteration:Int){
             painter = painterResource(R.drawable.star_full),
             contentDescription = "$iteration star",
             modifier = Modifier
-                .padding(horizontal = 4.dp)
-                .size(16.dp, 16.dp),
-            alignment = Alignment.BottomEnd
+                //.padding(horizontal = 4.dp)
+                .size(16.dp, 20.dp),
+            alignment = Alignment.CenterEnd,
         )
+        Spacer(modifier = Modifier.width(4.dp))
     }
 }
 
