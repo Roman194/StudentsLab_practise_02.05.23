@@ -6,12 +6,11 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.net.Uri
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
-import androidx.compose.material.SnackbarDefaults.backgroundColor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -68,13 +67,39 @@ class VideoActivity: ComponentActivity(){
 @Composable
 fun VideoAct() {
     val context = LocalContext.current
-    Scaffold(topBar = {TopAppBar {
-        IconButton(onClick = { context.startActivity(Intent(context,MainActivity::class.java))}) {
-            Icon(painter = painterResource(id = android.R.drawable.ic_menu_close_clear_cancel), contentDescription ="BackIcon" ,)//сырое доделать!
+    Scaffold(topBar = { TopAppBar {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                //.alpha(0.5f)
+                .background(Color(244, 209, 68, 240))
+                .height(56.dp)
+        ) {
+
+
+            IconButton(onClick = {
+                context.startActivity(
+                    Intent(
+                        context,
+                        MainActivity::class.java
+                    )
+                )
+            }) {
+                Icon(
+                    painter = painterResource(id = android.R.drawable.ic_menu_close_clear_cancel),
+                    contentDescription = "BackIcon",
+                    modifier = Modifier.padding(vertical=11.dp)
+                )
+            }
+            Text(
+                "DoTA 2 Video preview",
+                color = Color.White,
+                style = MaterialTheme.typography.subtitle2,
+                fontSize = 18.sp,
+                modifier = Modifier.padding(horizontal = 50.dp,vertical=14.dp)
+            )
         }
-        Text("DoTA 2 Video preview", fontSize = 22.sp)
-    } },
-        backgroundColor = Color(244, 209, 68, 240))
+    } },)
     {
 
         Play_video(context)
