@@ -126,56 +126,6 @@ fun Greeting(messages: List<Message>) {
 
         }
     ) {
-
-                //Image(
-                //    painter = painterResource(R.drawable.back_picture_2),
-                //    contentDescription = "Background picture",
-                //    //modifier = Modifier.size(392.dp, 309.dp),
-                 //   modifier = Modifier.fillMaxWidth().height(150.dp),
-                 //   alignment = Alignment.TopCenter,
-                 //   contentScale = ContentScale.Crop,
-                    //alpha=if(textSize.value==18f) 0f else 1f
-                  //  alpha=1f
-               // )
-               // Row {
-
-                    //Image(
-                    //    painter = painterResource(R.drawable.mask_logo),
-                   //     contentDescription = "logo picture",
-                   //     modifier = Modifier.size(149.dp, 395.dp),
-                    //    alignment = Alignment.BottomEnd,
-                    //    alpha=if(textSize.value==18f) 0f else 1f
-                    //)
-                    //Column(modifier = Modifier.size(width =180.dp, height = 395.dp)){
-                        //Text(text = "",
-                        //    modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp),
-                        //    color= MaterialTheme.colors.onBackground,
-                        //    style = MaterialTheme.typography.subtitle2)
-                        //Spacer(modifier = Modifier.height(235.dp))
-                    //Text(text = "DoTA 2",
-                    //        modifier = Modifier.padding(horizontal = 4.dp, vertical = 3.dp)
-                    //                            .road(whenCollapsed = Alignment.TopStart, whenExpanded = Alignment.BottomStart),
-                    //        color= MaterialTheme.colors.onBackground,
-                    //        style = MaterialTheme.typography.subtitle2,
-                     //       fontSize = textSize)//30.sp
-                        //Row{
-                        //    for (i in 0..4)
-                        //        Star_full(i,textSize,true)
-
-                        //    Spacer(modifier = Modifier.width(6.dp))
-                        //    Text(
-                        //        text="70M",
-                        //        modifier=Modifier.padding(horizontal=4.dp)
-                         //           .road(whenCollapsed = Alignment.TopStart, whenExpanded = Alignment.BottomStart),
-                         //       color = Color(198, 195, 181, 128), //белому не идёт
-                         //       style = MaterialTheme.typography.body2,
-                          //      fontSize = if(textSize.value==18f) 0.sp else 12.sp,
-                        //        textAlign = TextAlign.End
-                        //    )
-
-
-
-
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
