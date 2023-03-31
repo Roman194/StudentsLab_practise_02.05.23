@@ -40,21 +40,6 @@ class VideoActivity: ComponentActivity(){
                     color = MaterialTheme.colors.background
                 ) {
 
-                    //Column{
-
-
-                    //    Button(onClick = { context.startActivity(Intent(context,MainActivity::class.java)) },
-                    //        modifier= Modifier
-                    //            .size(width = 120.dp, height = 100.dp)
-                    //            .padding(horizontal = 18.dp, vertical = 18.dp),
-                    //        colors = ButtonDefaults.buttonColors(backgroundColor = Color(244, 209, 68, 240))
-                    //    ) {
-                    //        Text(text = "  <- \nBack",
-                    //            style = MaterialTheme.typography.button,
-                     //           color = MaterialTheme.colors.onBackground
-                     //       )
-                    //    }
-                    //    Spacer(modifier = Modifier.height(175.dp))
                     VideoAct()
 
                     }
@@ -68,10 +53,9 @@ class VideoActivity: ComponentActivity(){
 fun VideoAct() {
     val context = LocalContext.current
     Scaffold(topBar = { TopAppBar {
-        Box(
+        Box( //head bar box with description of what in this activity user can watch and how he can move back from it
             modifier = Modifier
                 .fillMaxWidth()
-                //.alpha(0.5f)
                 .background(Color(244, 209, 68, 240))
                 .height(56.dp)
         ) {
@@ -110,7 +94,7 @@ fun VideoAct() {
 
     @SuppressLint("RememberReturnType")
     @Composable
-    fun Play_video(context: Context){
+    fun Play_video(context: Context){ //function of playing to user video (use one of the google mp.4 public videos)
         val videoUrl="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WeAreGoingOnBullrun.mp4"
 
         val exoPlayer = remember(context){

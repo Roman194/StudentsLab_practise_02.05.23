@@ -1,10 +1,7 @@
 package com.example.students_camp_practise
 
-import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
-import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -25,22 +22,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.viewinterop.AndroidView
 import com.example.students_camp_practise.ui.theme.Students_camp_practiseTheme
-import com.google.android.exoplayer2.SimpleExoPlayer
-import com.google.android.exoplayer2.source.ProgressiveMediaSource
-import com.google.android.exoplayer2.ui.PlayerView
-import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
-import com.google.android.exoplayer2.util.Util
 import me.onebone.toolbar.CollapsingToolbarScaffold
 import me.onebone.toolbar.ScrollStrategy
 import me.onebone.toolbar.rememberCollapsingToolbarScaffoldState
@@ -55,7 +44,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    Greeting(SampleData.feedbackSample)
+                    MainScreen_elements(SampleData.feedbackSample)
                 }
             }
         }
@@ -64,7 +53,7 @@ class MainActivity : ComponentActivity() {
 data class Message(val author: String,val time: String, val body: String, val u_logo:Int)
 
 @Composable
-fun Greeting(messages: List<Message>) {
+fun MainScreen_elements(messages: List<Message>) { //receive list of objects with Message data class type
     val context=LocalContext.current
     val state = rememberCollapsingToolbarScaffoldState()
 
@@ -73,13 +62,13 @@ fun Greeting(messages: List<Message>) {
             .fillMaxSize(),
         state = state,
         scrollStrategy = ScrollStrategy.ExitUntilCollapsed,
-        toolbar = {
+        toolbar = {//elements of collapsing toolbar scope described there
             val textSize = (18 + (30 - 18) * state.toolbarState.progress).sp
             val miniTextSize =(18 + (20 - 18) * state.toolbarState.progress).sp
 
             Box(
                 modifier = Modifier
-                    .background(color = Color(244, 209, 68, 255))
+                    .background(color = Color(244, 209, 68, 255)) //toolbar will have yellow background color while it will be collapsed
                     .fillMaxWidth()
                     .height(200.dp)
                     .pin()
@@ -94,7 +83,7 @@ fun Greeting(messages: List<Message>) {
                 contentDescription = "background picture",
                 alignment = Alignment.TopCenter,
                 contentScale = ContentScale.Crop,
-                alpha=if(textSize.value==18f) 0f else 1f
+                alpha=if(textSize.value==18f) 0f else 1f //became invisible in collapsed state
             )
 
             Image(
@@ -107,10 +96,10 @@ fun Greeting(messages: List<Message>) {
                 modifier= Modifier
                     .road(whenCollapsed = Alignment.BottomStart, whenExpanded = Alignment.TopEnd)
                     .padding(vertical = 16.dp, horizontal = 85.dp),
-                color = if(miniTextSize.value==18f) Color(255, 255, 255, 255) else Color(198, 195, 181, 128), //белому не идёт
+                color = if(miniTextSize.value==18f) Color(255, 255, 255, 255) else Color(198, 195, 181, 128), //became brighter in collapsed state
                 style = MaterialTheme.typography.body2,
                 textAlign = TextAlign.Center,
-                fontSize = if(miniTextSize.value<=19f)18.sp else 0.sp
+                fontSize = if(miniTextSize.value<=19f)18.sp else 0.sp //invisible while have bigger font than 19f (i really like how it looks like)
             )
             Text(
                 text = "DoTA 2",
@@ -125,7 +114,7 @@ fun Greeting(messages: List<Message>) {
 
 
         }
-    ) {
+    ) {//main screen ellements described there
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
@@ -137,11 +126,12 @@ fun Greeting(messages: List<Message>) {
                     )
                     Spacer(modifier = Modifier.width(129.dp))
 
-                    for (i in 0..4)
+                    for (i in 0..4) //function of full star drawing (5 similar Images)
                         Star_full(i)
+
                     Text(text="70M",
                         modifier=Modifier.padding(horizontal=4.dp),
-                        color = Color(198, 195, 181, 128), //белому не идёт
+                        color = Color(198, 195, 181, 128),
                         style = MaterialTheme.typography.body2,
                         textAlign = TextAlign.End,
                         fontSize = 16.sp
@@ -152,12 +142,12 @@ fun Greeting(messages: List<Message>) {
             }
 
             item {
-                var isExpanded by remember { mutableStateOf(false) }
+                var isExpanded by remember { mutableStateOf(false) } //images in this item are clickable
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
                         .fillMaxHeight()
-                        .padding(vertical = 8.dp)
+                        .padding(vertical = 8.dp) //Box of Image and Text elements
                 ) {
                     Row(modifier = Modifier.padding(horizontal = 12.dp)) {
                         Image(
@@ -253,10 +243,10 @@ fun Greeting(messages: List<Message>) {
                 )
                 Surface(shape = MaterialTheme.shapes.medium,
                     elevation = 0.5.dp,
-                    color = surfaceColor,
+                    color = surfaceColor, //this surface will change color to yellow after user click on it
                     modifier = Modifier
                         .clickable { isExpanded = !isExpanded }
-                        .animateContentSize()
+                        .animateContentSize() //this surface is clickable with animation
                         .padding(1.dp)) {
                     Text(
                         text = "Dota 2 is a multiplayer online battle arena (MOBA) game which has two teams of five players compete to collectively destroy a large structure defended by the opposing team known as the \"Ancient\", whilst defending their own.",
@@ -265,20 +255,20 @@ fun Greeting(messages: List<Message>) {
                             .padding(horizontal = 12.dp, vertical = 12.dp),
                         color = MaterialTheme.colors.onBackground,
                         style = MaterialTheme.typography.body2,
-                        maxLines = if (isExpanded) Int.MAX_VALUE else 2
+                        maxLines = if (isExpanded) Int.MAX_VALUE else 2 //this Text show all his lines only after surface will receive click of user
                     )
                 }
             }
             item {
                 var isExpanded by remember { mutableStateOf(false) }
-                Box {
+                Box {//this box is used to make video symbol over image. Image is still clickable under it
                     Row {
                         Image(
                             painter = painterResource(R.drawable.description_picture),
                             contentDescription = "app screen",
                             modifier = Modifier
                                 .size(250.dp, 128.dp)
-                                .clickable {
+                                .clickable { //on user click on it he will move to special VideoActivity to show him a video snippet
                                     isExpanded = !isExpanded
                                     Toast
                                         .makeText(
@@ -287,7 +277,7 @@ fun Greeting(messages: List<Message>) {
                                             Toast.LENGTH_LONG
                                         )
                                         .show()
-                                    //Play_video(context)
+
                                     context.startActivity(
                                         Intent(
                                             context,
@@ -322,7 +312,7 @@ fun Greeting(messages: List<Message>) {
                 }
             }
             item {
-                Column {
+                Column {//Reviews head ellements
                     Text(
                         text = "Review & Ratings",
                         modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp),
@@ -339,7 +329,7 @@ fun Greeting(messages: List<Message>) {
                             style = MaterialTheme.typography.subtitle2,
                             fontSize = 50.sp
                         )
-                        Column {
+                        Column {//drawing fifth stars but the last one is semi-painted one
                             Spacer(modifier = Modifier.height(18.dp))
                             Row {
                                 for (i in 0..3)
@@ -358,7 +348,7 @@ fun Greeting(messages: List<Message>) {
                             Text(
                                 text = "70M Reviews",
                                 modifier = Modifier.padding(horizontal = 4.dp),
-                                color = Color(198, 195, 181, 255), //белому не идёт
+                                color = Color(198, 195, 181, 255),
                                 style = MaterialTheme.typography.body2
                             )
 
@@ -369,12 +359,12 @@ fun Greeting(messages: List<Message>) {
 
             }
 
-            items(messages) { message ->
-                Every_user_review(message)
+            items(messages) { message -> //this construction optimize creation of similar reviews elements
+                Every_user_review(message) //all Message data class type objects transmits in turn
             }
             item {
                 Spacer(modifier = Modifier.height(12.dp))
-                Button(
+                Button( //yellow clickable button
                     onClick = {
                         Toast.makeText(
                             context,
@@ -410,18 +400,16 @@ fun Greeting(messages: List<Message>) {
 @Composable
 fun DefaultPreview() {
     Students_camp_practiseTheme {
-        Greeting(SampleData.feedbackSample)
+        MainScreen_elements(SampleData.feedbackSample)
     }
 }
 @Composable
 fun Star_full(iteration:Int){
     Students_camp_practiseTheme {
-        Image(
+        Image( //making of similar image elements. They differ only by contentDescription
             painter = painterResource(R.drawable.star_full),
-            contentDescription = "$iteration star",
-            modifier = Modifier
-                //.padding(horizontal = 4.dp)
-                .size(16.dp, 20.dp),
+            contentDescription = "$iteration star", //depends from for cycle iteration
+            modifier = Modifier.size(16.dp, 20.dp),
             alignment = Alignment.CenterEnd,
         )
         Spacer(modifier = Modifier.width(4.dp))
@@ -430,7 +418,7 @@ fun Star_full(iteration:Int){
 
 
 @Composable
-fun Every_user_review(msg:Message){
+fun Every_user_review(msg:Message){//receive msg object which contain information about user logo, name, time and review
     Students_camp_practiseTheme {
         var isExpanded by remember { mutableStateOf(false) }
         val surfaceColor by animateColorAsState(
@@ -465,23 +453,23 @@ fun Every_user_review(msg:Message){
             }
             Surface(shape = MaterialTheme.shapes.medium,
                 elevation =0.5.dp,
-                color= surfaceColor,
+                color= surfaceColor, //this surface will change color to yellow after user click on it
                 modifier= Modifier
                     .animateContentSize()
-                    .clickable { isExpanded = !isExpanded }
+                    .clickable { isExpanded = !isExpanded } //this surface is clickable with animation
                     .padding(1.dp)) {
                 Text(
                     msg.body,
                     color = MaterialTheme.colors.onBackground,
                     style = MaterialTheme.typography.body2,
                     modifier = Modifier.padding(horizontal = 12.dp),
-                    maxLines = if (isExpanded) Int.MAX_VALUE else 2
+                    maxLines = if (isExpanded) Int.MAX_VALUE else 2 //this Text show all his lines only after surface will receive click of user
                 )
             }
         }
     }
 }
-object SampleData {
+object SampleData { //object with list of user reviews information (Message data class)
     val feedbackSample = listOf(
         Message(
             "Marius Conte",
