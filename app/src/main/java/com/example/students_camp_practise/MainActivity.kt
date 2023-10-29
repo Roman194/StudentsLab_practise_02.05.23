@@ -300,6 +300,8 @@ fun MainScreen_elements(messages: List<Message>) { //receive list of objects wit
                             color = MaterialTheme.colors.onBackground,
                             style = MaterialTheme.typography.subtitle2
                         )
+
+
                         Spacer(modifier = Modifier.width(88.dp))
 
                         Image(
