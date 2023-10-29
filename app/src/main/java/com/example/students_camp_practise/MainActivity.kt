@@ -29,6 +29,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.view.WindowCompat
 import com.example.students_camp_practise.ui.theme.Students_camp_practiseTheme
 import me.onebone.toolbar.CollapsingToolbarScaffold
 import me.onebone.toolbar.ScrollStrategy
@@ -37,6 +38,9 @@ import me.onebone.toolbar.rememberCollapsingToolbarScaffoldState
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        WindowCompat.setDecorFitsSystemWindows(window,false)
+
         setContent {
             Students_camp_practiseTheme {
                 // A surface container using the 'background' color from the theme
@@ -53,13 +57,24 @@ class MainActivity : ComponentActivity() {
 data class Message(val author: String,val time: String, val body: String, val u_logo:Int)
 
 @Composable
+private fun ApplySystemBarColors(){
+
+}
+
+@Composable
 fun MainScreen_elements(messages: List<Message>) { //receive list of objects with Message data class type
     val context=LocalContext.current
     val state = rememberCollapsingToolbarScaffoldState()
 
     CollapsingToolbarScaffold(
         modifier = Modifier
-            .fillMaxSize(),
+            .fillMaxWidth()
+            .padding(
+                WindowInsets.systemBars
+                    .only(WindowInsetsSides.Top)
+                    .asPaddingValues()
+            )
+        ,
         state = state,
         scrollStrategy = ScrollStrategy.ExitUntilCollapsed,
         toolbar = {//elements of collapsing toolbar scope described there
@@ -68,10 +83,18 @@ fun MainScreen_elements(messages: List<Message>) { //receive list of objects wit
 
             Box(
                 modifier = Modifier
-                    .background(color = Color(244, 209, 68, 255)) //toolbar will have yellow background color while it will be collapsed
+                    .background(
+                        color = Color(
+                            244,
+                            209,
+                            68,
+                            255
+                        )
+                    ) //toolbar will have yellow background color while it will be collapsed
                     .fillMaxWidth()
                     .height(200.dp)
                     .pin()
+
             )
 
 
@@ -458,7 +481,9 @@ fun Every_user_review(msg:Message){//receive msg object which contain informatio
                 color= surfaceColor, //this surface will change color to yellow after user click on it
                 modifier= Modifier
                     .animateContentSize()
-                    .clickable { isExpanded = !isExpanded } //this surface is clickable with animation
+                    .clickable {
+                        isExpanded = !isExpanded
+                    } //this surface is clickable with animation
                     .padding(1.dp)) {
                 Text(
                     msg.body,
