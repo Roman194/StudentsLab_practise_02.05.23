@@ -1,6 +1,5 @@
 package com.example.students_camp_practise
 
-import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import android.widget.Toast
@@ -12,12 +11,35 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.only
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Divider
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -29,6 +51,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.view.WindowCompat
 import com.example.students_camp_practise.ui.theme.Students_camp_practiseTheme
 import me.onebone.toolbar.CollapsingToolbarScaffold
 import me.onebone.toolbar.ScrollStrategy
@@ -37,6 +60,9 @@ import me.onebone.toolbar.rememberCollapsingToolbarScaffoldState
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        WindowCompat.setDecorFitsSystemWindows(window,false)
+
         setContent {
             Students_camp_practiseTheme {
                 // A surface container using the 'background' color from the theme
@@ -52,14 +78,28 @@ class MainActivity : ComponentActivity() {
 }
 data class Message(val author: String,val time: String, val body: String, val u_logo:Int)
 
+data class TagMessage(val name: String, val category: String)
+data class Tag(val tagName:String, val onClickMessage: TagMessage)
+
 @Composable
 fun MainScreen_elements(messages: List<Message>) { //receive list of objects with Message data class type
     val context=LocalContext.current
     val state = rememberCollapsingToolbarScaffoldState()
+    val tagsList = listOf(
+        Tag(tagName = "MOBA", onClickMessage = TagMessage(name="MOBA",category="similar")),
+        Tag(tagName = "MULTIPLAYER", onClickMessage = TagMessage(name="multiplayer gaming", category = "multiplayer")),
+        Tag(tagName = "STRATEGY", onClickMessage = TagMessage(name = "strategies", category = "strategy"))
+    )
 
     CollapsingToolbarScaffold(
         modifier = Modifier
-            .fillMaxSize(),
+            .fillMaxWidth()
+            .padding(
+                WindowInsets.systemBars
+                    .only(WindowInsetsSides.Top)
+                    .asPaddingValues()
+            )
+        ,
         state = state,
         scrollStrategy = ScrollStrategy.ExitUntilCollapsed,
         toolbar = {//elements of collapsing toolbar scope described there
@@ -68,10 +108,18 @@ fun MainScreen_elements(messages: List<Message>) { //receive list of objects wit
 
             Box(
                 modifier = Modifier
-                    .background(color = Color(244, 209, 68, 255)) //toolbar will have yellow background color while it will be collapsed
+                    .background(
+                        color = Color(
+                            244,
+                            209,
+                            68,
+                            255
+                        )
+                    ) //toolbar will have yellow background color while it will be collapsed
                     .fillMaxWidth()
                     .height(200.dp)
                     .pin()
+
             )
 
 
@@ -142,98 +190,8 @@ fun MainScreen_elements(messages: List<Message>) { //receive list of objects wit
             }
 
             item {
-                var isExpanded by remember { mutableStateOf(false) } //images in this item are clickable
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .fillMaxHeight()
-                        .padding(vertical = 8.dp) //Box of Image and Text elements
-                ) {
-                    Row(modifier = Modifier.padding(horizontal = 12.dp)) {
-                        Image(
-                            painter = painterResource(R.drawable.tag),
-                            contentDescription = "logo tag",
-                            modifier = Modifier
-                                .size(53.dp, 22.dp)
-                                .clickable {
-                                    isExpanded = !isExpanded
-                                    Toast
-                                        .makeText(
-                                            context,
-                                            "Like MOBA? \nYou will have ability to install it in next versions of our app ;)",
-                                            Toast.LENGTH_LONG
-                                        )
-                                        .show()
-                                },
-                            alignment = Alignment.BottomEnd
-                        )
-                        Spacer(modifier = Modifier.width(6.dp))
-                        Image(
-                            painter = painterResource(R.drawable.tag_1),
-                            contentDescription = "logo tag 1",
-                            modifier = Modifier
-                                .size(93.dp, 22.dp)
-                                .clickable {
-                                    isExpanded = !isExpanded
-                                    Toast
-                                        .makeText(
-                                            context,
-                                            "Like multiplayer gaming? \nYou will have ability to install this and other multiplayer games in next versions of our app ;)",
-                                            Toast.LENGTH_LONG
-                                        )
-                                        .show()
-                                },
-                            alignment = Alignment.BottomEnd
-                        )
-                        Spacer(modifier = Modifier.width(6.dp))
-                        Image(
-                            painter = painterResource(R.drawable.tag_2),
-                            contentDescription = "logo tag 2",
-                            modifier = Modifier
-                                .size(73.dp, 22.dp)
-                                .clickable {
-                                    isExpanded = !isExpanded
-                                    Toast
-                                        .makeText(
-                                            context,
-                                            "Like strategies? \nYou will have ability to install this and other strategy games in next versions of our app ;)",
-                                            Toast.LENGTH_LONG
-                                        )
-                                        .show()
-                                },
-                            alignment = Alignment.BottomEnd
-                        )
+                ScrollTag(tags = tagsList, context = context)
 
-                    }
-                    Row(modifier = Modifier.padding(horizontal = 12.dp)) {
-                        Text(
-                            text = "MOBA",
-                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp),
-                            color = Color(68, 169, 244, 255),
-                            style = MaterialTheme.typography.body2,
-                            fontSize = 12.sp,
-                            textAlign = TextAlign.End
-                        )
-                        Spacer(modifier = Modifier.width(6.dp))
-                        Text(
-                            text = "MULTIPLAYER",
-                            modifier = Modifier.padding(horizontal = 5.dp, vertical = 3.dp),
-                            color = Color(68, 169, 244, 255),
-                            style = MaterialTheme.typography.body2,
-                            fontSize = 12.sp,
-                            textAlign = TextAlign.End
-                        )
-                        Spacer(modifier = Modifier.width(6.dp))
-                        Text(
-                            text = "STRATEGY",
-                            modifier = Modifier.padding(horizontal = 6.dp, vertical = 3.dp),
-                            color = Color(68, 169, 244, 255),
-                            style = MaterialTheme.typography.body2,
-                            fontSize = 12.sp,
-                            textAlign = TextAlign.End
-                        )
-                    }
-                }
 
             }
             item {
@@ -247,7 +205,12 @@ fun MainScreen_elements(messages: List<Message>) { //receive list of objects wit
                     modifier = Modifier
                         .clickable { isExpanded = !isExpanded }
                         .animateContentSize() //this surface is clickable with animation
-                        .padding(1.dp)) {
+                        .padding(
+                            start = 1.dp,
+                            end = 1.dp,
+                            bottom = 18.dp
+                        )
+                ) {
                     Text(
                         text = "Dota 2 is a multiplayer online battle arena (MOBA) game which has two teams of five players compete to collectively destroy a large structure defended by the opposing team known as the \"Ancient\", whilst defending their own.",
                         modifier = Modifier
@@ -273,17 +236,17 @@ fun MainScreen_elements(messages: List<Message>) { //receive list of objects wit
                                     Toast
                                         .makeText(
                                             context,
-                                            "There will be MOBA video snippet in next versions :)\n Now you already can enjoy a ralli!!!",
+                                            "There will be MOBA video snippet in next versions :)",
                                             Toast.LENGTH_LONG
                                         )
                                         .show()
 
-                                    context.startActivity(
-                                        Intent(
-                                            context,
-                                            VideoActivity::class.java
-                                        )
-                                    )
+//                                    context.startActivity(
+//                                        Intent(
+//                                            context,
+//                                            VideoActivity::class.java
+//                                        )
+//                                    )
                                 },
                             alignment = Alignment.BottomEnd
                         )
@@ -361,8 +324,22 @@ fun MainScreen_elements(messages: List<Message>) { //receive list of objects wit
 
             }
 
-            items(messages) { message -> //this construction optimize creation of similar reviews elements
+            itemsIndexed(messages) { index,message -> //this construction optimize creation of similar reviews elements
+
                 Every_user_review(message) //all Message data class type objects transmits in turn
+
+                if(index < messages.lastIndex){
+                    Divider(
+                        color = Color.Gray,
+                        thickness = 1.dp,
+                        modifier = Modifier.padding(
+                            top=12.dp,
+                            bottom = 10.dp,
+                            start = 24.dp,
+                            end = 24.dp)
+
+                    )
+                }
             }
             item {
                 Spacer(modifier = Modifier.height(12.dp))
@@ -458,7 +435,9 @@ fun Every_user_review(msg:Message){//receive msg object which contain informatio
                 color= surfaceColor, //this surface will change color to yellow after user click on it
                 modifier= Modifier
                     .animateContentSize()
-                    .clickable { isExpanded = !isExpanded } //this surface is clickable with animation
+                    .clickable {
+                        isExpanded = !isExpanded
+                    } //this surface is clickable with animation
                     .padding(1.dp)) {
                 Text(
                     msg.body,
