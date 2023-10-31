@@ -56,15 +56,18 @@ class MainActivity : ComponentActivity() {
 }
 data class Message(val author: String,val time: String, val body: String, val u_logo:Int)
 
-@Composable
-private fun ApplySystemBarColors(){
-
-}
+data class TagMessage(val name: String, val category: String)
+data class Tag(val tagName:String, val onClickMessage: TagMessage)
 
 @Composable
 fun MainScreen_elements(messages: List<Message>) { //receive list of objects with Message data class type
     val context=LocalContext.current
     val state = rememberCollapsingToolbarScaffoldState()
+    val tagsList = listOf(
+        Tag(tagName = "MOBA", onClickMessage = TagMessage(name="MOBA",category="similar")),
+        Tag(tagName = "MULTIPLAYER", onClickMessage = TagMessage(name="multiplayer gaming", category = "multiplayer")),
+        Tag(tagName = "STRATEGY", onClickMessage = TagMessage(name = "strategies", category = "strategy"))
+    )
 
     CollapsingToolbarScaffold(
         modifier = Modifier
@@ -165,98 +168,8 @@ fun MainScreen_elements(messages: List<Message>) { //receive list of objects wit
             }
 
             item {
-                var isExpanded by remember { mutableStateOf(false) } //images in this item are clickable
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .fillMaxHeight()
-                        .padding(vertical = 8.dp) //Box of Image and Text elements
-                ) {
-                    Row(modifier = Modifier.padding(horizontal = 12.dp)) {
-                        Image(
-                            painter = painterResource(R.drawable.tag),
-                            contentDescription = "logo tag",
-                            modifier = Modifier
-                                .size(53.dp, 22.dp)
-                                .clickable {
-                                    isExpanded = !isExpanded
-                                    Toast
-                                        .makeText(
-                                            context,
-                                            "Like MOBA? \nYou will have ability to install it in next versions of our app ;)",
-                                            Toast.LENGTH_LONG
-                                        )
-                                        .show()
-                                },
-                            alignment = Alignment.BottomEnd
-                        )
-                        Spacer(modifier = Modifier.width(6.dp))
-                        Image(
-                            painter = painterResource(R.drawable.tag_1),
-                            contentDescription = "logo tag 1",
-                            modifier = Modifier
-                                .size(93.dp, 22.dp)
-                                .clickable {
-                                    isExpanded = !isExpanded
-                                    Toast
-                                        .makeText(
-                                            context,
-                                            "Like multiplayer gaming? \nYou will have ability to install this and other multiplayer games in next versions of our app ;)",
-                                            Toast.LENGTH_LONG
-                                        )
-                                        .show()
-                                },
-                            alignment = Alignment.BottomEnd
-                        )
-                        Spacer(modifier = Modifier.width(6.dp))
-                        Image(
-                            painter = painterResource(R.drawable.tag_2),
-                            contentDescription = "logo tag 2",
-                            modifier = Modifier
-                                .size(73.dp, 22.dp)
-                                .clickable {
-                                    isExpanded = !isExpanded
-                                    Toast
-                                        .makeText(
-                                            context,
-                                            "Like strategies? \nYou will have ability to install this and other strategy games in next versions of our app ;)",
-                                            Toast.LENGTH_LONG
-                                        )
-                                        .show()
-                                },
-                            alignment = Alignment.BottomEnd
-                        )
+                ScrollTag(tags = tagsList, context = context)
 
-                    }
-                    Row(modifier = Modifier.padding(horizontal = 12.dp)) {
-                        Text(
-                            text = "MOBA",
-                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp),
-                            color = Color(68, 169, 244, 255),
-                            style = MaterialTheme.typography.body2,
-                            fontSize = 12.sp,
-                            textAlign = TextAlign.End
-                        )
-                        Spacer(modifier = Modifier.width(6.dp))
-                        Text(
-                            text = "MULTIPLAYER",
-                            modifier = Modifier.padding(horizontal = 5.dp, vertical = 3.dp),
-                            color = Color(68, 169, 244, 255),
-                            style = MaterialTheme.typography.body2,
-                            fontSize = 12.sp,
-                            textAlign = TextAlign.End
-                        )
-                        Spacer(modifier = Modifier.width(6.dp))
-                        Text(
-                            text = "STRATEGY",
-                            modifier = Modifier.padding(horizontal = 6.dp, vertical = 3.dp),
-                            color = Color(68, 169, 244, 255),
-                            style = MaterialTheme.typography.body2,
-                            fontSize = 12.sp,
-                            textAlign = TextAlign.End
-                        )
-                    }
-                }
 
             }
             item {
