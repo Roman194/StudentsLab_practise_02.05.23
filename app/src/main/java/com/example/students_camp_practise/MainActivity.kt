@@ -1,6 +1,5 @@
 package com.example.students_camp_practise
 
-import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import android.widget.Toast
@@ -12,12 +11,35 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.only
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Divider
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -183,7 +205,12 @@ fun MainScreen_elements(messages: List<Message>) { //receive list of objects wit
                     modifier = Modifier
                         .clickable { isExpanded = !isExpanded }
                         .animateContentSize() //this surface is clickable with animation
-                        .padding(1.dp)) {
+                        .padding(
+                            start = 1.dp,
+                            end = 1.dp,
+                            bottom = 18.dp
+                        )
+                ) {
                     Text(
                         text = "Dota 2 is a multiplayer online battle arena (MOBA) game which has two teams of five players compete to collectively destroy a large structure defended by the opposing team known as the \"Ancient\", whilst defending their own.",
                         modifier = Modifier
@@ -209,17 +236,17 @@ fun MainScreen_elements(messages: List<Message>) { //receive list of objects wit
                                     Toast
                                         .makeText(
                                             context,
-                                            "There will be MOBA video snippet in next versions :)\n Now you already can enjoy a ralli!!!",
+                                            "There will be MOBA video snippet in next versions :)",
                                             Toast.LENGTH_LONG
                                         )
                                         .show()
 
-                                    context.startActivity(
-                                        Intent(
-                                            context,
-                                            VideoActivity::class.java
-                                        )
-                                    )
+//                                    context.startActivity(
+//                                        Intent(
+//                                            context,
+//                                            VideoActivity::class.java
+//                                        )
+//                                    )
                                 },
                             alignment = Alignment.BottomEnd
                         )
@@ -297,8 +324,22 @@ fun MainScreen_elements(messages: List<Message>) { //receive list of objects wit
 
             }
 
-            items(messages) { message -> //this construction optimize creation of similar reviews elements
+            itemsIndexed(messages) { index,message -> //this construction optimize creation of similar reviews elements
+
                 Every_user_review(message) //all Message data class type objects transmits in turn
+
+                if(index < messages.lastIndex){
+                    Divider(
+                        color = Color.Gray,
+                        thickness = 1.dp,
+                        modifier = Modifier.padding(
+                            top=12.dp,
+                            bottom = 10.dp,
+                            start = 24.dp,
+                            end = 24.dp)
+
+                    )
+                }
             }
             item {
                 Spacer(modifier = Modifier.height(12.dp))
