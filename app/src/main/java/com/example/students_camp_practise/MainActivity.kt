@@ -174,8 +174,12 @@ fun MainScreen_elements(messages: List<Message>) { //receive list of objects wit
                     )
                     Spacer(modifier = Modifier.width(129.dp))
 
-                    for (i in 0..4) //function of full star drawing (5 similar Images)
-                        Star_full(i)
+                    StarsRow( //function of star drawing (5 similar Images)
+                        rating = 5.0,
+                        painterFull = R.drawable.star_new,
+                        painterSemi = R.drawable.star_semi_new,
+                        painterBold = R.drawable.star_bold_new
+                    )
 
                     Text(text="70M",
                         modifier=Modifier.padding(horizontal=4.dp),
@@ -243,21 +247,16 @@ fun MainScreen_elements(messages: List<Message>) { //receive list of objects wit
                             style = MaterialTheme.typography.subtitle2,
                             fontSize = 50.sp
                         )
-                        Column {//drawing fifth stars but the last one is semi-painted one
+                        Column {
                             Spacer(modifier = Modifier.height(16.dp))
-                            Row {
-                                for (i in 0..3)
-                                    Star_full(i)
 
-                                Image(
-                                    painter = painterResource(R.drawable.star_semi_new),
-                                    contentDescription = "fifth star",
-                                    modifier = Modifier
-                                        //.padding(vertical = 1.5.dp)
-                                        .size(16.dp, 20.dp),
-                                    alignment = Alignment.CenterEnd
-                                )
-                            }
+                            StarsRow( //function of full star drawing (5 similar Images)
+                                rating = 4.9,
+                                painterFull = R.drawable.star_new,
+                                painterSemi = R.drawable.star_semi_new,
+                                painterBold = R.drawable.star_bold_new
+                            )
+
                             Spacer(modifier = Modifier.height(2.dp))
                             Text(
                                 text = "70M Reviews",
@@ -331,19 +330,6 @@ fun DefaultPreview() {
         MainScreen_elements(SampleData.feedbackSample)
     }
 }
-@Composable
-fun Star_full(iteration:Int){
-    Students_camp_practiseTheme {
-        Image( //making of similar image elements. They differ only by contentDescription
-            painter = painterResource(R.drawable.star_new),
-            contentDescription = "$iteration star", //depends from for cycle iteration
-            modifier = Modifier.size(16.dp, 20.dp),
-            alignment = Alignment.CenterEnd,
-        )
-        Spacer(modifier = Modifier.width(4.dp))
-    }
-}
-
 
 @Composable
 fun Every_user_review(msg:Message){//receive msg object which contain information about user logo, name, time and review
