@@ -47,6 +47,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -90,6 +91,7 @@ fun MainScreen_elements(messages: List<Message>) { //receive list of objects wit
         Tag(tagName = "MULTIPLAYER", onClickMessage = TagMessage(name="multiplayer gaming", category = "multiplayer")),
         Tag(tagName = "STRATEGY", onClickMessage = TagMessage(name = "strategies", category = "strategy"))
     )
+    val messageClickText = stringResource(R.string.button_clck_msg)
 
     CollapsingToolbarScaffold(
         modifier = Modifier
@@ -108,14 +110,7 @@ fun MainScreen_elements(messages: List<Message>) { //receive list of objects wit
 
             Box(
                 modifier = Modifier
-                    .background(
-                        color = Color(
-                            244,
-                            209,
-                            68,
-                            255
-                        )
-                    ) //toolbar will have yellow background color while it will be collapsed
+                    .background(MaterialTheme.colors.primary) //toolbar will have yellow background color while it will be collapsed
                     .fillMaxWidth()
                     .height(200.dp)
                     .pin()
@@ -135,25 +130,25 @@ fun MainScreen_elements(messages: List<Message>) { //receive list of objects wit
             )
 
             Image(
-                painter = painterResource(id = R.drawable.mask_logo_2),
+                painter = painterResource(id = R.drawable.app_logo),
                 contentDescription = "logo picture",
                 alignment = Alignment.BottomEnd,
                 modifier = Modifier.size(143.dp,390.dp)
             )
-            Text(text="70M",
+            Text(text= stringResource(R.string.installs_digit),
                 modifier= Modifier
                     .road(whenCollapsed = Alignment.BottomStart, whenExpanded = Alignment.TopEnd)
                     .padding(vertical = 16.dp, horizontal = 85.dp),
-                color = if(miniTextSize.value==18f) Color(255, 255, 255, 255) else Color(198, 195, 181, 128), //became brighter in collapsed state
+                color = if(miniTextSize.value==18f) MaterialTheme.colors.onBackground else MaterialTheme.colors.secondary, //became brighter in collapsed state
                 style = MaterialTheme.typography.body2,
                 textAlign = TextAlign.Center,
                 fontSize = if(miniTextSize.value<=19f)18.sp else 0.sp //invisible while have bigger font than 19f (i really like how it looks like)
             )
             Text(
-                text = "DoTA 2",
+                text = stringResource(R.string.market_app_name),
                 modifier = Modifier
                     .road(Alignment.CenterStart, Alignment.BottomCenter)
-                    .padding(16.dp, 16.dp, 16.dp, 16.dp),
+                    .padding(all = 16.dp),
                 color = Color.White,
                 style=MaterialTheme.typography.subtitle2,
                 fontSize = textSize
@@ -168,18 +163,19 @@ fun MainScreen_elements(messages: List<Message>) { //receive list of objects wit
                 .fillMaxWidth()
         ) {
             item{
-                Row{
-                    Text(
-                        text = ""
-                    )
+                Row (modifier = Modifier.padding(top = 2.dp)){
                     Spacer(modifier = Modifier.width(129.dp))
 
-                    for (i in 0..4) //function of full star drawing (5 similar Images)
-                        Star_full(i)
+                    StarsRow( //function of star drawing (5 similar Images)
+                        rating = 5.0,
+                        painterFull = R.drawable.star_new,
+                        painterSemi = R.drawable.star_semi_new,
+                        painterBold = R.drawable.star_bold_new
+                    )
 
-                    Text(text="70M",
+                    Text(text= stringResource(R.string.installs_digit),
                         modifier=Modifier.padding(horizontal=4.dp),
-                        color = Color(198, 195, 181, 128),
+                        color = MaterialTheme.colors.secondary,
                         style = MaterialTheme.typography.body2,
                         textAlign = TextAlign.End,
                         fontSize = 16.sp
@@ -197,7 +193,7 @@ fun MainScreen_elements(messages: List<Message>) { //receive list of objects wit
             item {
                 var isExpanded by remember { mutableStateOf(false) }
                 val surfaceColor by animateColorAsState(
-                    if (isExpanded) Color(244, 209, 68, 240) else MaterialTheme.colors.surface,
+                    if (isExpanded)  MaterialTheme.colors.primary else MaterialTheme.colors.surface,//Color(244, 209, 68, 240)
                 )
                 Surface(shape = MaterialTheme.shapes.medium,
                     elevation = 0.5.dp,
@@ -212,7 +208,7 @@ fun MainScreen_elements(messages: List<Message>) { //receive list of objects wit
                         )
                 ) {
                     Text(
-                        text = "Dota 2 is a multiplayer online battle arena (MOBA) game which has two teams of five players compete to collectively destroy a large structure defended by the opposing team known as the \"Ancient\", whilst defending their own.",
+                        text = stringResource(R.string.market_app_description),
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 12.dp, vertical = 12.dp),
@@ -223,63 +219,12 @@ fun MainScreen_elements(messages: List<Message>) { //receive list of objects wit
                 }
             }
             item {
-                var isExpanded by remember { mutableStateOf(false) }
-                Box {//this box is used to make video symbol over image. Image is still clickable under it
-                    Row {
-                        Image(
-                            painter = painterResource(R.drawable.description_picture),
-                            contentDescription = "app screen",
-                            modifier = Modifier
-                                .size(250.dp, 128.dp)
-                                .clickable { //on user click on it he will move to special VideoActivity to show him a video snippet
-                                    isExpanded = !isExpanded
-                                    Toast
-                                        .makeText(
-                                            context,
-                                            "There will be MOBA video snippet in next versions :)",
-                                            Toast.LENGTH_LONG
-                                        )
-                                        .show()
-
-//                                    context.startActivity(
-//                                        Intent(
-//                                            context,
-//                                            VideoActivity::class.java
-//                                        )
-//                                    )
-                                },
-                            alignment = Alignment.BottomEnd
-                        )
-                        Image(
-                            painter = painterResource(R.drawable.description_picture_1),
-                            contentDescription = "app screen 1",
-                            modifier = Modifier.size(240.dp, 128.dp),
-                            alignment = Alignment.BottomEnd
-                        )
-                    }
-                    Row {
-                        Text(
-                            text = "",
-                            color = MaterialTheme.colors.onBackground,
-                            style = MaterialTheme.typography.subtitle2
-                        )
-
-
-                        Spacer(modifier = Modifier.width(88.dp))
-
-                        Image(
-                            painter = painterResource(R.drawable.video_symbol),
-                            contentDescription = "video symbol",
-                            modifier = Modifier.size(80.dp, 128.dp),
-                            alignment = Alignment.Center
-                        )
-                    }
-                }
+                ScrollPictures(context)
             }
             item {
                 Column {//Reviews head ellements
                     Text(
-                        text = "Review & Ratings",
+                        text =  stringResource(R.string.review_label) +" & " + stringResource(R.string.rating_label),
                         modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp),
                         color = MaterialTheme.colors.onBackground,
                         style = MaterialTheme.typography.subtitle2,
@@ -288,32 +233,27 @@ fun MainScreen_elements(messages: List<Message>) { //receive list of objects wit
                     Row {
 
                         Text(
-                            text = "4.9",
+                            text = stringResource(R.string.rating_digit),
                             modifier = Modifier.padding(horizontal = 12.dp),
                             color = MaterialTheme.colors.onBackground,
                             style = MaterialTheme.typography.subtitle2,
                             fontSize = 50.sp
                         )
-                        Column {//drawing fifth stars but the last one is semi-painted one
-                            Spacer(modifier = Modifier.height(18.dp))
-                            Row {
-                                for (i in 0..3)
-                                    Star_full(i)
+                        Column {
+                            Spacer(modifier = Modifier.height(16.dp))
 
-                                Image(
-                                    painter = painterResource(R.drawable.star_semi1),
-                                    contentDescription = "fifth star",
-                                    modifier = Modifier
-                                        .padding(vertical = 1.5.dp)
-                                        .size(16.dp, 16.dp),
-                                    alignment = Alignment.BottomEnd
-                                )
-                            }
+                            StarsRow( //function of full star drawing (5 similar Images)
+                                rating = 4.9,
+                                painterFull = R.drawable.star_new,
+                                painterSemi = R.drawable.star_semi_new,
+                                painterBold = R.drawable.star_bold_new
+                            )
+
                             Spacer(modifier = Modifier.height(2.dp))
                             Text(
-                                text = "70M Reviews",
+                                text = stringResource(R.string.installs_digit) + " " + stringResource(R.string.reviews_label),
                                 modifier = Modifier.padding(horizontal = 4.dp),
-                                color = Color(198, 195, 181, 255),
+                                color = MaterialTheme.colors.onPrimary,
                                 style = MaterialTheme.typography.body2
                             )
 
@@ -347,7 +287,7 @@ fun MainScreen_elements(messages: List<Message>) { //receive list of objects wit
                     onClick = {
                         Toast.makeText(
                             context,
-                            "Sorry, can't install it now \nYou will have ability to install it in next versions of app",
+                             messageClickText,
                             Toast.LENGTH_LONG
                         ).show()
                     },
@@ -355,12 +295,12 @@ fun MainScreen_elements(messages: List<Message>) { //receive list of objects wit
                         .fillMaxWidth()
                         .size(width = 327.dp, height = 80.dp)
                         .padding(horizontal = 18.dp, vertical = 18.dp),
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(244, 209, 68, 255))
+                    colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.primary)
                 ) {
                     Text(
-                        text = "Install",
+                        text = stringResource(R.string.button_text),
                         style = MaterialTheme.typography.button,
-                        color = Color(7, 7, 7, 255)
+                        color = MaterialTheme.colors.background//Color(7, 7, 7, 255)
                     )
                 }
             }
@@ -382,26 +322,13 @@ fun DefaultPreview() {
         MainScreen_elements(SampleData.feedbackSample)
     }
 }
-@Composable
-fun Star_full(iteration:Int){
-    Students_camp_practiseTheme {
-        Image( //making of similar image elements. They differ only by contentDescription
-            painter = painterResource(R.drawable.star_full),
-            contentDescription = "$iteration star", //depends from for cycle iteration
-            modifier = Modifier.size(16.dp, 20.dp),
-            alignment = Alignment.CenterEnd,
-        )
-        Spacer(modifier = Modifier.width(4.dp))
-    }
-}
-
 
 @Composable
 fun Every_user_review(msg:Message){//receive msg object which contain information about user logo, name, time and review
     Students_camp_practiseTheme {
         var isExpanded by remember { mutableStateOf(false) }
         val surfaceColor by animateColorAsState(
-            if (isExpanded) Color(244, 209, 68, 240) else MaterialTheme.colors.surface,
+            if (isExpanded) MaterialTheme.colors.primary else MaterialTheme.colors.surface,
         )
         Column (modifier = Modifier.padding(horizontal = 12.dp, vertical =8.dp )){
             Row(modifier = Modifier.padding(all = 8.dp)) {
@@ -411,7 +338,7 @@ fun Every_user_review(msg:Message){//receive msg object which contain informatio
                     modifier = Modifier
                         .size(50.dp)
                         .clip(CircleShape)
-                        .border(1.dp, color = Color(244, 209, 68, 255), CircleShape)
+                        .border(1.dp, color = MaterialTheme.colors.primary, CircleShape)
                 )
 
                 Column (modifier = Modifier.padding(all = 6.dp)) {
@@ -424,7 +351,7 @@ fun Every_user_review(msg:Message){//receive msg object which contain informatio
 
                     Text(
                         msg.time,
-                        color = Color(220, 220, 220, 128), //белому не идёт
+                        color = MaterialTheme.colors.secondary,//Color(220, 220, 220, 128),
                         style = MaterialTheme.typography.body2
                     )
                 }
@@ -456,7 +383,7 @@ object SampleData { //object with list of user reviews information (Message data
             "Marius Conte",
             "February 14, 2019",
             "Once you start to learn its secrets, there’s a wild and exciting variety of play here that’s unmatched, even by its peers.",
-            R.drawable.user_logo_3
+            R.drawable.user_logo
         ),
         Message(
             "Maria Marcelino",
@@ -471,14 +398,14 @@ object SampleData { //object with list of user reviews information (Message data
                     "Android 10 (API 29)\n" +
                     "Android 11 (API 30)\n" +
                     "Android 12 (API 31)\n",
-            R.drawable.user_logo_5
+            R.drawable.user_logo_2
         ),
         Message(
             "Lisa Ajax",
             "February 5, 2016",
             "I think Kotlin will be my favorite programming language.\n" +
                     "It's so much fun!",
-            R.drawable.user_logo_2
+            R.drawable.user_logo_3
         ),
     )
 }
