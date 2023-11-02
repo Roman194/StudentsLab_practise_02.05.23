@@ -53,6 +53,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.view.WindowCompat
+import com.example.students_camp_practise.assets.SampleData
+import com.example.students_camp_practise.data.Message
+import com.example.students_camp_practise.data.Tag
+import com.example.students_camp_practise.data.TagMessage
 import com.example.students_camp_practise.ui.theme.Students_camp_practiseTheme
 import me.onebone.toolbar.CollapsingToolbarScaffold
 import me.onebone.toolbar.ScrollStrategy
@@ -66,24 +70,19 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             Students_camp_practiseTheme {
-                // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    MainScreen_elements(SampleData.feedbackSample)
+                    MainScreenElements(SampleData.feedbackSample)
                 }
             }
         }
     }
 }
-data class Message(val author: String,val time: String, val body: String, val u_logo:Int)
-
-data class TagMessage(val name: String, val category: String)
-data class Tag(val tagName:String, val onClickMessage: TagMessage)
 
 @Composable
-fun MainScreen_elements(messages: List<Message>) { //receive list of objects with Message data class type
+fun MainScreenElements(messages: List<Message>) { //receive list of objects with Message data class type
     val context=LocalContext.current
     val state = rememberCollapsingToolbarScaffoldState()
     val tagsList = listOf(
@@ -121,6 +120,7 @@ fun MainScreen_elements(messages: List<Message>) { //receive list of objects wit
             Image(
                 modifier = Modifier
                     .pin()
+                    .fillMaxWidth()
                     .size(392.dp, 309.dp),
                 painter = painterResource(id = R.drawable.back_picture_2),
                 contentDescription = "background picture",
@@ -149,12 +149,10 @@ fun MainScreen_elements(messages: List<Message>) { //receive list of objects wit
                 modifier = Modifier
                     .road(Alignment.CenterStart, Alignment.BottomCenter)
                     .padding(all = 16.dp),
-                color = Color.White,
+                color = MaterialTheme.colors.onBackground,
                 style=MaterialTheme.typography.subtitle2,
                 fontSize = textSize
             )
-
-
 
         }
     ) {//main screen ellements described there
@@ -164,7 +162,7 @@ fun MainScreen_elements(messages: List<Message>) { //receive list of objects wit
         ) {
             item{
                 Row (modifier = Modifier.padding(top = 2.dp)){
-                    Spacer(modifier = Modifier.width(129.dp))
+                    Spacer(modifier = Modifier.width(129.dp)) //How to make it universal?
 
                     StarsRow( //function of star drawing (5 similar Images)
                         rating = 5.0,
@@ -188,85 +186,20 @@ fun MainScreen_elements(messages: List<Message>) { //receive list of objects wit
             item {
                 ScrollTag(tags = tagsList, context = context)
 
-
             }
             item {
-                var isExpanded by remember { mutableStateOf(false) }
-                val surfaceColor by animateColorAsState(
-                    if (isExpanded)  MaterialTheme.colors.primary else MaterialTheme.colors.surface,//Color(244, 209, 68, 240)
-                )
-                Surface(shape = MaterialTheme.shapes.medium,
-                    elevation = 0.5.dp,
-                    color = surfaceColor, //this surface will change color to yellow after user click on it
-                    modifier = Modifier
-                        .clickable { isExpanded = !isExpanded }
-                        .animateContentSize() //this surface is clickable with animation
-                        .padding(
-                            start = 1.dp,
-                            end = 1.dp,
-                            bottom = 18.dp
-                        )
-                ) {
-                    Text(
-                        text = stringResource(R.string.market_app_description),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 12.dp, vertical = 12.dp),
-                        color = MaterialTheme.colors.onBackground,
-                        style = MaterialTheme.typography.body2,
-                        maxLines = if (isExpanded) Int.MAX_VALUE else 2 //this Text show all his lines only after surface will receive click of user
-                    )
-                }
+                textDescription()
             }
             item {
                 ScrollPictures(context)
             }
             item {
-                Column {//Reviews head ellements
-                    Text(
-                        text =  stringResource(R.string.review_label) +" & " + stringResource(R.string.rating_label),
-                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp),
-                        color = MaterialTheme.colors.onBackground,
-                        style = MaterialTheme.typography.subtitle2,
-                        fontSize = 20.sp
-                    )
-                    Row {
-
-                        Text(
-                            text = stringResource(R.string.rating_digit),
-                            modifier = Modifier.padding(horizontal = 12.dp),
-                            color = MaterialTheme.colors.onBackground,
-                            style = MaterialTheme.typography.subtitle2,
-                            fontSize = 50.sp
-                        )
-                        Column {
-                            Spacer(modifier = Modifier.height(16.dp))
-
-                            StarsRow( //function of full star drawing (5 similar Images)
-                                rating = 4.9,
-                                painterFull = R.drawable.star_new,
-                                painterSemi = R.drawable.star_semi_new,
-                                painterBold = R.drawable.star_bold_new
-                            )
-
-                            Spacer(modifier = Modifier.height(2.dp))
-                            Text(
-                                text = stringResource(R.string.installs_digit) + " " + stringResource(R.string.reviews_label),
-                                modifier = Modifier.padding(horizontal = 4.dp),
-                                color = MaterialTheme.colors.onPrimary,
-                                style = MaterialTheme.typography.body2
-                            )
-
-                        }
-                    }
-                    Spacer(modifier = Modifier.height(12.dp))
-                }
-
+                reviewHead()
             }
 
             itemsIndexed(messages) { index,message -> //this construction optimize creation of similar reviews elements
 
-                Every_user_review(message) //all Message data class type objects transmits in turn
+                EveryUserReview(message) //all Message data class type objects transmits in turn
 
                 if(index < messages.lastIndex){
                     Divider(
@@ -319,93 +252,6 @@ fun MainScreen_elements(messages: List<Message>) { //receive list of objects wit
 @Composable
 fun DefaultPreview() {
     Students_camp_practiseTheme {
-        MainScreen_elements(SampleData.feedbackSample)
+        MainScreenElements(SampleData.feedbackSample)
     }
-}
-
-@Composable
-fun Every_user_review(msg:Message){//receive msg object which contain information about user logo, name, time and review
-    Students_camp_practiseTheme {
-        var isExpanded by remember { mutableStateOf(false) }
-        val surfaceColor by animateColorAsState(
-            if (isExpanded) MaterialTheme.colors.primary else MaterialTheme.colors.surface,
-        )
-        Column (modifier = Modifier.padding(horizontal = 12.dp, vertical =8.dp )){
-            Row(modifier = Modifier.padding(all = 8.dp)) {
-                Image(
-                    painter = painterResource(msg.u_logo),
-                    contentDescription = "user profile logo",
-                    modifier = Modifier
-                        .size(50.dp)
-                        .clip(CircleShape)
-                        .border(1.dp, color = MaterialTheme.colors.primary, CircleShape)
-                )
-
-                Column (modifier = Modifier.padding(all = 6.dp)) {
-                    Text(
-                        msg.author,
-                        color = MaterialTheme.colors.onBackground,
-                        style = MaterialTheme.typography.body2,
-                        fontSize = 16.sp
-                    )
-
-                    Text(
-                        msg.time,
-                        color = MaterialTheme.colors.secondary,//Color(220, 220, 220, 128),
-                        style = MaterialTheme.typography.body2
-                    )
-                }
-
-            }
-            Surface(shape = MaterialTheme.shapes.medium,
-                elevation =0.5.dp,
-                color= surfaceColor, //this surface will change color to yellow after user click on it
-                modifier= Modifier
-                    .animateContentSize()
-                    .clickable {
-                        isExpanded = !isExpanded
-                    } //this surface is clickable with animation
-                    .padding(1.dp)) {
-                Text(
-                    msg.body,
-                    color = MaterialTheme.colors.onBackground,
-                    style = MaterialTheme.typography.body2,
-                    modifier = Modifier.padding(horizontal = 12.dp),
-                    maxLines = if (isExpanded) Int.MAX_VALUE else 2 //this Text show all his lines only after surface will receive click of user
-                )
-            }
-        }
-    }
-}
-object SampleData { //object with list of user reviews information (Message data class)
-    val feedbackSample = listOf(
-        Message(
-            "Marius Conte",
-            "February 14, 2019",
-            "Once you start to learn its secrets, there’s a wild and exciting variety of play here that’s unmatched, even by its peers.",
-            R.drawable.user_logo
-        ),
-        Message(
-            "Maria Marcelino",
-            "November 12, 2017",
-            "List of Android versions:\n" +
-                    "Android KitKat (API 19)\n" +
-                    "Android Lollipop (API 21)\n" +
-                    "Android Marshmallow (API 23)\n" +
-                    "Android Nougat (API 24)\n" +
-                    "Android Oreo (API 26)\n" +
-                    "Android Pie (API 28)\n" +
-                    "Android 10 (API 29)\n" +
-                    "Android 11 (API 30)\n" +
-                    "Android 12 (API 31)\n",
-            R.drawable.user_logo_2
-        ),
-        Message(
-            "Lisa Ajax",
-            "February 5, 2016",
-            "I think Kotlin will be my favorite programming language.\n" +
-                    "It's so much fun!",
-            R.drawable.user_logo_3
-        ),
-    )
 }

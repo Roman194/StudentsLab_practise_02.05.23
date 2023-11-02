@@ -19,10 +19,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.students_camp_practise.data.Tag
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun ScrollTag(tags:List<Tag>,context: Context){
+fun ScrollTag(tags:List<Tag>, context: Context){
     val chipClickMessage = stringResource(R.string.tag_clck_msg)
     val chipClickMessageSecond = stringResource(R.string.tag_clck_msg_2)
     val chipClckMsgThrd = stringResource(R.string.tag_clck_msg_3)
