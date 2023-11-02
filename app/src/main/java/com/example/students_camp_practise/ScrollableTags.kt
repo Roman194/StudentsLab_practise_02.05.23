@@ -15,6 +15,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -22,6 +23,9 @@ import androidx.compose.ui.unit.sp
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ScrollTag(tags:List<Tag>,context: Context){
+    val chipClickMessage = stringResource(R.string.tag_clck_msg)
+    val chipClickMessageSecond = stringResource(R.string.tag_clck_msg_2)
+    val chipClckMsgThrd = stringResource(R.string.tag_clck_msg_3)
 
     LazyRow(
         horizontalArrangement = Arrangement.spacedBy(10.dp),
@@ -35,18 +39,18 @@ fun ScrollTag(tags:List<Tag>,context: Context){
                     Toast
                         .makeText(
                             context,
-                            "Like ${tag.onClickMessage.name}? \n" +
-                                    "You will have ability to install this and other ${tag.onClickMessage.category} games in next versions of our app ;)",
+                            chipClickMessage + " ${tag.onClickMessage.name}? \n" +
+                                    chipClickMessageSecond + " ${tag.onClickMessage.category} " + chipClckMsgThrd,
                             Toast.LENGTH_LONG
                         )
                         .show()
                 },
-                colors = ChipDefaults.chipColors(backgroundColor = Color(68, 169, 244, 61)),
+                colors = ChipDefaults.chipColors(backgroundColor = MaterialTheme.colors.secondaryVariant),
                 content = {
                     Text(
                         text = tag.tagName,
                         modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp),
-                        color = Color(68, 169, 244, 255),
+                        color = MaterialTheme.colors.primaryVariant,
                         style = MaterialTheme.typography.body2,
                         fontSize = 12.sp,
                         textAlign = TextAlign.End

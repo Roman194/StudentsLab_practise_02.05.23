@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name_ru">Students_camp_practise</string>
+    <string name="installs_digit_ru">70M</string>
+    <string name="market_app_name_ru">ДоТА 2</string>
+    <string name="market_app_description_ru">
+        ДоТА 2 - это командная онлайн баттл игра, в которой 2 команды из 5 игроков соревнуются в коллективном разрушении больших структур,
+        сталкиваясь с сопротивлением команды противника, известной как "Древние", в то время, как защищают свою.</string>
+    <string name="review_label_ru">Отзывы</string>
+    <string name="rating_label_ru">Оценки</string>
+    <string name="rating_digit_ru">4.9</string>
+    <string name="reviews_label_ru">Отзывов</string>
+    <string name="button_clck_msg_ru">К сожалению, пока что нельзя установить это.
+        Вы сможете это сделать в следующих версиях приложения</string>
+    <string name="button_text_ru">Установить</string>
+    <string name="tag_clck_msg_ru">Нравится </string>
+    <string name="tag_clck_msg_2_ru">Вы сможете установить эту и другие </string>
+    <string name="tag_clck_msg_3_ru"> игры в наших будущих версиях приложения ;)</string>
+</resources>

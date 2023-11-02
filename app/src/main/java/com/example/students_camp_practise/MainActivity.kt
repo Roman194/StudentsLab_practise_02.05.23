@@ -47,6 +47,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -90,6 +91,7 @@ fun MainScreen_elements(messages: List<Message>) { //receive list of objects wit
         Tag(tagName = "MULTIPLAYER", onClickMessage = TagMessage(name="multiplayer gaming", category = "multiplayer")),
         Tag(tagName = "STRATEGY", onClickMessage = TagMessage(name = "strategies", category = "strategy"))
     )
+    val messageClickText = stringResource(R.string.button_clck_msg)
 
     CollapsingToolbarScaffold(
         modifier = Modifier
@@ -108,14 +110,7 @@ fun MainScreen_elements(messages: List<Message>) { //receive list of objects wit
 
             Box(
                 modifier = Modifier
-                    .background(
-                        color = Color(
-                            244,
-                            209,
-                            68,
-                            255
-                        )
-                    ) //toolbar will have yellow background color while it will be collapsed
+                    .background(MaterialTheme.colors.primary) //toolbar will have yellow background color while it will be collapsed
                     .fillMaxWidth()
                     .height(200.dp)
                     .pin()
@@ -140,20 +135,20 @@ fun MainScreen_elements(messages: List<Message>) { //receive list of objects wit
                 alignment = Alignment.BottomEnd,
                 modifier = Modifier.size(143.dp,390.dp)
             )
-            Text(text="70M",
+            Text(text= stringResource(R.string.installs_digit),
                 modifier= Modifier
                     .road(whenCollapsed = Alignment.BottomStart, whenExpanded = Alignment.TopEnd)
                     .padding(vertical = 16.dp, horizontal = 85.dp),
-                color = if(miniTextSize.value==18f) Color(255, 255, 255, 255) else Color(198, 195, 181, 128), //became brighter in collapsed state
+                color = if(miniTextSize.value==18f) MaterialTheme.colors.onBackground else MaterialTheme.colors.secondary, //became brighter in collapsed state
                 style = MaterialTheme.typography.body2,
                 textAlign = TextAlign.Center,
                 fontSize = if(miniTextSize.value<=19f)18.sp else 0.sp //invisible while have bigger font than 19f (i really like how it looks like)
             )
             Text(
-                text = "DoTA 2",
+                text = stringResource(R.string.market_app_name),
                 modifier = Modifier
                     .road(Alignment.CenterStart, Alignment.BottomCenter)
-                    .padding(16.dp, 16.dp, 16.dp, 16.dp),
+                    .padding(all = 16.dp),
                 color = Color.White,
                 style=MaterialTheme.typography.subtitle2,
                 fontSize = textSize
@@ -168,10 +163,7 @@ fun MainScreen_elements(messages: List<Message>) { //receive list of objects wit
                 .fillMaxWidth()
         ) {
             item{
-                Row{
-                    Text(
-                        text = ""
-                    )
+                Row (modifier = Modifier.padding(top = 2.dp)){
                     Spacer(modifier = Modifier.width(129.dp))
 
                     StarsRow( //function of star drawing (5 similar Images)
@@ -181,9 +173,9 @@ fun MainScreen_elements(messages: List<Message>) { //receive list of objects wit
                         painterBold = R.drawable.star_bold_new
                     )
 
-                    Text(text="70M",
+                    Text(text= stringResource(R.string.installs_digit),
                         modifier=Modifier.padding(horizontal=4.dp),
-                        color = Color(198, 195, 181, 128),
+                        color = MaterialTheme.colors.secondary,
                         style = MaterialTheme.typography.body2,
                         textAlign = TextAlign.End,
                         fontSize = 16.sp
@@ -201,7 +193,7 @@ fun MainScreen_elements(messages: List<Message>) { //receive list of objects wit
             item {
                 var isExpanded by remember { mutableStateOf(false) }
                 val surfaceColor by animateColorAsState(
-                    if (isExpanded) Color(244, 209, 68, 240) else MaterialTheme.colors.surface,
+                    if (isExpanded)  MaterialTheme.colors.primary else MaterialTheme.colors.surface,//Color(244, 209, 68, 240)
                 )
                 Surface(shape = MaterialTheme.shapes.medium,
                     elevation = 0.5.dp,
@@ -216,7 +208,7 @@ fun MainScreen_elements(messages: List<Message>) { //receive list of objects wit
                         )
                 ) {
                     Text(
-                        text = "Dota 2 is a multiplayer online battle arena (MOBA) game which has two teams of five players compete to collectively destroy a large structure defended by the opposing team known as the \"Ancient\", whilst defending their own.",
+                        text = stringResource(R.string.market_app_description),
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 12.dp, vertical = 12.dp),
@@ -232,7 +224,7 @@ fun MainScreen_elements(messages: List<Message>) { //receive list of objects wit
             item {
                 Column {//Reviews head ellements
                     Text(
-                        text = "Review & Ratings",
+                        text =  stringResource(R.string.review_label) +" & " + stringResource(R.string.rating_label),
                         modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp),
                         color = MaterialTheme.colors.onBackground,
                         style = MaterialTheme.typography.subtitle2,
@@ -241,7 +233,7 @@ fun MainScreen_elements(messages: List<Message>) { //receive list of objects wit
                     Row {
 
                         Text(
-                            text = "4.9",
+                            text = stringResource(R.string.rating_digit),
                             modifier = Modifier.padding(horizontal = 12.dp),
                             color = MaterialTheme.colors.onBackground,
                             style = MaterialTheme.typography.subtitle2,
@@ -259,9 +251,9 @@ fun MainScreen_elements(messages: List<Message>) { //receive list of objects wit
 
                             Spacer(modifier = Modifier.height(2.dp))
                             Text(
-                                text = "70M Reviews",
+                                text = stringResource(R.string.installs_digit) + " " + stringResource(R.string.reviews_label),
                                 modifier = Modifier.padding(horizontal = 4.dp),
-                                color = Color(198, 195, 181, 255),
+                                color = MaterialTheme.colors.onPrimary,
                                 style = MaterialTheme.typography.body2
                             )
 
@@ -295,7 +287,7 @@ fun MainScreen_elements(messages: List<Message>) { //receive list of objects wit
                     onClick = {
                         Toast.makeText(
                             context,
-                            "Sorry, can't install it now \nYou will have ability to install it in next versions of app",
+                             messageClickText,
                             Toast.LENGTH_LONG
                         ).show()
                     },
@@ -303,12 +295,12 @@ fun MainScreen_elements(messages: List<Message>) { //receive list of objects wit
                         .fillMaxWidth()
                         .size(width = 327.dp, height = 80.dp)
                         .padding(horizontal = 18.dp, vertical = 18.dp),
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(244, 209, 68, 255))
+                    colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.primary)
                 ) {
                     Text(
-                        text = "Install",
+                        text = stringResource(R.string.button_text),
                         style = MaterialTheme.typography.button,
-                        color = Color(7, 7, 7, 255)
+                        color = MaterialTheme.colors.background//Color(7, 7, 7, 255)
                     )
                 }
             }
@@ -336,7 +328,7 @@ fun Every_user_review(msg:Message){//receive msg object which contain informatio
     Students_camp_practiseTheme {
         var isExpanded by remember { mutableStateOf(false) }
         val surfaceColor by animateColorAsState(
-            if (isExpanded) Color(244, 209, 68, 240) else MaterialTheme.colors.surface,
+            if (isExpanded) MaterialTheme.colors.primary else MaterialTheme.colors.surface,
         )
         Column (modifier = Modifier.padding(horizontal = 12.dp, vertical =8.dp )){
             Row(modifier = Modifier.padding(all = 8.dp)) {
@@ -346,7 +338,7 @@ fun Every_user_review(msg:Message){//receive msg object which contain informatio
                     modifier = Modifier
                         .size(50.dp)
                         .clip(CircleShape)
-                        .border(1.dp, color = Color(244, 209, 68, 255), CircleShape)
+                        .border(1.dp, color = MaterialTheme.colors.primary, CircleShape)
                 )
 
                 Column (modifier = Modifier.padding(all = 6.dp)) {
@@ -359,7 +351,7 @@ fun Every_user_review(msg:Message){//receive msg object which contain informatio
 
                     Text(
                         msg.time,
-                        color = Color(220, 220, 220, 128), //белому не идёт
+                        color = MaterialTheme.colors.secondary,//Color(220, 220, 220, 128),
                         style = MaterialTheme.typography.body2
                     )
                 }
