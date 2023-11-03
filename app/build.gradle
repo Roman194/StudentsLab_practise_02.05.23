@@ -5,12 +5,12 @@ plugins {
 
 android {
     namespace 'com.example.students_camp_practise'
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.example.students_camp_practise"
-        minSdk 26
-        targetSdk 33
+        minSdk 24
+        targetSdk 34
         versionCode 1
         versionName "1.0"
 
@@ -61,6 +61,5 @@ dependencies {
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_ui_version"
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_ui_version"
 
-    implementation 'com.google.android.exoplayer:exoplayer:2.16.1'
     implementation "me.onebone:toolbar-compose:2.3.5"
 }

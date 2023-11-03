@@ -1,3 +1,16 @@
 <resources>
     <string name="app_name">Students_camp_practise</string>
+    <string name="installs_digit">70M</string>
+    <string name="market_app_name">DoTA 2</string>
+    <string name="market_app_description">Dota 2 is a multiplayer online battle arena (MOBA) game which has two teams of five players compete to collectively destroy a large structure defended by the opposing team known as the "Ancient", whilst defending their own.</string>
+    <string name="review_label">Review &amp; Ratings</string>
+    <string name="rating_label">Ratings</string>
+    <string name="rating_digit">4.9</string>
+    <string name="reviews_label">Reviews</string>
+    <string name="button_clck_msg">Sorry, can\'t install it now.\nYou will have ability to install it in next versions of app</string>
+    <string name="button_text">Install</string>
+    <string name="tag_clck_msg">Like </string>
+    <string name="tag_clck_msg_2">You will have ability to install this and other </string>
+    <string name="tag_clck_msg_3">games in next versions of our app ;)</string>
+
 </resources>
