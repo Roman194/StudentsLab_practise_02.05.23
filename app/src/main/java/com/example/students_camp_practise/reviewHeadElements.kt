@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.sp
 fun reviewHead(){
     Column {//Reviews head ellements
         Text(
-            text =  stringResource(R.string.review_label) +" & " + stringResource(R.string.rating_label),
+            text =  stringResource(R.string.review_label),
             modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp),
             color = MaterialTheme.colors.onBackground,
             style = MaterialTheme.typography.subtitle2,

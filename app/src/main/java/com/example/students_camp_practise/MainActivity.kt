@@ -5,12 +5,8 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -28,7 +24,6 @@ import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Divider
@@ -36,13 +31,8 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -215,26 +205,32 @@ fun MainScreenElements(messages: List<Message>) { //receive list of objects with
                 }
             }
             item {
-                Spacer(modifier = Modifier.height(12.dp))
-                Button( //yellow clickable button
-                    onClick = {
-                        Toast.makeText(
-                            context,
-                             messageClickText,
-                            Toast.LENGTH_LONG
-                        ).show()
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .size(width = 327.dp, height = 80.dp)
-                        .padding(horizontal = 18.dp, vertical = 18.dp),
-                    colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.primary)
-                ) {
-                    Text(
-                        text = stringResource(R.string.button_text),
-                        style = MaterialTheme.typography.button,
-                        color = MaterialTheme.colors.background//Color(7, 7, 7, 255)
-                    )
+                Column(modifier = Modifier.padding(all = 18.dp)) {
+                    Spacer(modifier = Modifier.height(12.dp))
+                    Button( //yellow clickable button
+                        onClick = {
+                            Toast.makeText(
+                                context,
+                                messageClickText,
+                                Toast.LENGTH_LONG
+                            ).show()
+                        },
+                        modifier = Modifier
+                            .fillMaxSize()
+                            //.size(width = 327.dp, height = 80.dp)
+                            .padding(
+                                WindowInsets.systemBars
+                                    .only(WindowInsetsSides.Bottom + WindowInsetsSides.Horizontal)
+                                    .asPaddingValues(),
+                            ),
+                        colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.primary)
+                    ) {
+                        Text(
+                            text = stringResource(R.string.button_text),
+                            style = MaterialTheme.typography.button,
+                            color = MaterialTheme.colors.background
+                        )
+                    }
                 }
             }
         }
