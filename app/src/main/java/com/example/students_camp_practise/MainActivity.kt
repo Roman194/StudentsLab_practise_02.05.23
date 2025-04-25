@@ -31,6 +31,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -73,7 +74,7 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun MainScreenElements(messages: List<Message>) { //receive list of objects with Message data class type
-    val context=LocalContext.current
+    val context = LocalContext.current
     val state = rememberCollapsingToolbarScaffoldState()
     val tagsList = listOf(
         Tag(tagName = "MOBA", onClickMessage = TagMessage(name="MOBA",category="similar")),
@@ -95,7 +96,7 @@ fun MainScreenElements(messages: List<Message>) { //receive list of objects with
         scrollStrategy = ScrollStrategy.ExitUntilCollapsed,
         toolbar = {//elements of collapsing toolbar scope described there
             val textSize = (18 + (30 - 18) * state.toolbarState.progress).sp
-            val miniTextSize =(18 + (20 - 18) * state.toolbarState.progress).sp
+            val miniTextSize = (18 + (20 - 18) * state.toolbarState.progress).sp
 
             Box(
                 modifier = Modifier
@@ -132,7 +133,7 @@ fun MainScreenElements(messages: List<Message>) { //receive list of objects with
                 color = if(miniTextSize.value==18f) MaterialTheme.colors.onBackground else MaterialTheme.colors.secondary, //became brighter in collapsed state
                 style = MaterialTheme.typography.body2,
                 textAlign = TextAlign.Center,
-                fontSize = if(miniTextSize.value<=19f)18.sp else 0.sp //invisible while have bigger font than 19f (i really like how it looks like)
+                fontSize = if(miniTextSize.value<=19f)18.sp else 0.sp//invisible while have bigger font than 19f (i really like how it looks like)
             )
             Text(
                 text = stringResource(R.string.market_app_name),
@@ -145,7 +146,7 @@ fun MainScreenElements(messages: List<Message>) { //receive list of objects with
             )
 
         }
-    ) {//main screen ellements described there
+    ) {//main screen elements described there
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
@@ -187,23 +188,8 @@ fun MainScreenElements(messages: List<Message>) { //receive list of objects with
                 reviewHead()
             }
 
-            itemsIndexed(messages) { index,message -> //this construction optimize creation of similar reviews elements
+            //Раздел с комментариями пользователей должен быть реализован здесь
 
-                EveryUserReview(message) //all Message data class type objects transmits in turn
-
-                if(index < messages.lastIndex){
-                    Divider(
-                        color = Color.Gray,
-                        thickness = 1.dp,
-                        modifier = Modifier.padding(
-                            top=12.dp,
-                            bottom = 10.dp,
-                            start = 24.dp,
-                            end = 24.dp)
-
-                    )
-                }
-            }
             item {
                 Column(modifier = Modifier.padding(all = 18.dp)) {
                     Spacer(modifier = Modifier.height(12.dp))
